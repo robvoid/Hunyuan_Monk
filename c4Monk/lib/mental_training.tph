@@ -1,0 +1,33 @@
+
+	
+// ADD_SECTYPE ~c4MonkMentalTraining~ @301
+
+// COPY_EXISTING spcl151.spl ~override/c4mkmtcl.spl~
+	// LPF ALTER_EFFECT INT_VAR opcode=221 parameter1=0 parameter2=c4MonkMentalTraining END
+// BUT_ONLY
+	
+OUTER_FOR (x=1;x<5;++x) BEGIN
+	LAF skill_creation STR_VAR spellname=~c4mkmt%x%~ END
+	COPY_EXISTING ~c4mkmt%x%a.spl~ override
+		WRITE_LONG 8 ~-1~
+		// WRITE_BYTE 0x27 c4MonkMentalTraining
+		LPF ALTER_EFFECT INT_VAR timing=9 duration=0 END
+		LPF ALTER_EFFECT INT_VAR match_opcode=215 timing=0 duration=1 END
+		LPF CLONE_EFFECT INT_VAR multi_match=1 match_timing=9 opcode=206 parameter1=0 parameter2=0 STR_VAR resource=~c4mkmt%x%a~ insert=last END
+		
+	COPY ~.../inlined/blank.baf~ ~%OUTPUT%/mental_skill.baf~
+		FOR (n=1;n<7;++n) BEGIN
+			APPEND_FILE_EVALUATE ~%SCRIPTS%/mental_stuff.baf~
+		END
+		
+	EXTEND_BOTTOM ~c4mkskil.bcs~ ~%OUTPUT%/mental_skill.baf~
+END
+
+//EE»ìÂÒÃüÁîµÄ#328
+ACTION_IF GAME_IS ~bgee bg2ee eet~ BEGIN
+	COPY_EXISTING_REGEXP GLOB ~c4mkmt4.*\.spl~ override
+		PATCH_FOR_EACH parameter2 IN 41 67 68 BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=233 match_parameter2=119 opcode=328 parameter1=0 parameter2 special=1 END
+		END
+	BUT_ONLY
+END

@@ -1,0 +1,80 @@
+ACTION_IF GAME_IS ~soa tob bgt ca tutu tutu_totsc iwd_in_bg2~ THEN BEGIN
+	ACTION_FOR_EACH file IN iplot01k.itm iplot04g.itm iplot04h.itm iplot04i.itm xr2400.are xr2600.are BEGIN
+		DISABLE_FROM_KEY "%file%"
+	END
+END
+	
+MKDIR ~%MOD_FOLDER%/output~
+OUTER_SPRINT OUTPUT ~%MOD_FOLDER%/output~
+OUTER_SPRINT SCRIPTS ~%MOD_FOLDER%/baf~
+OUTER_SPRINT LIBS ~%MOD_FOLDER%/lib~
+OUTER_SPRINT VERSION_CHECK ~%LIBS%/version_check~
+
+INCLUDE ~%LIBS%/_functions.tpa~
+
+OUTER_SET c4MonkVer=300
+	
+ACTION_IF GAME_IS ~BGEE BG2EE EET~ BEGIN
+	OUTER_SPRINT c4MonkKit ~c4Monk~
+	OUTER_SPRINT INSTANT_ACTIONS_TOBEX ~~
+	OUTER_SPRINT INSTANT_ACTIONS_FLAGS ~FLAGS BIT9~
+END ELSE BEGIN
+	OUTER_SPRINT c4MonkKit ~TRUECLASS~
+	OUTER_SPRINT INSTANT_ACTIONS_TOBEX ~Dialogue~
+	OUTER_SPRINT INSTANT_ACTIONS_FLAGS ~~
+END
+
+//////////////////////////////////////////////////////////
+OUTER_SPRINT specific ~OR(6) 
+TriggerOverride(Player1,Global("c4MonkCheck","Locals",1))
+TriggerOverride(Player2,Global("c4MonkCheck","Locals",1))
+TriggerOverride(Player3,Global("c4MonkCheck","Locals",1))
+TriggerOverride(Player4,Global("c4MonkCheck","Locals",1))
+TriggerOverride(Player5,Global("c4MonkCheck","Locals",1))
+TriggerOverride(Player6,Global("c4MonkCheck","Locals",1))~
+
+//////////////////////////////////////////////////////////
+ACTION_DEFINE_ASSOCIATIVE_ARRAY max_level BEGIN
+	c4mkf1 =>	5
+	c4mkf2 =>	5
+	c4mkf3 =>	5
+	c4mkf4 =>	5
+	c4mkf5 =>	5
+	c4mkf6 =>	5
+	c4mkbd =>	5
+	c4mkmt1 =>	1
+	c4mkmt2 =>	1
+	c4mkmt3 =>	1
+	c4mkmt4 =>	1
+END
+
+ACTION_DEFINE_ASSOCIATIVE_ARRAY var_name BEGIN
+	c4mkf1	=>	c4MonkColdFist
+	c4mkf2	=>	c4MonkFireFist
+	c4mkf3	=>	c4MonkElectronicFist
+	c4mkf4	=>	c4MonkAcidFist
+	c4mkf5	=>	c4MonkPiercingFist
+	c4mkf6	=>	c4MonkSlashingFist
+	c4mkbd	=>	c4MonkBodyTraining
+	c4mkmt1 =>	c4MonkMentalTraining1
+	c4mkmt2 =>	c4MonkMentalTraining2
+	c4mkmt3 =>	c4MonkMentalTraining3
+	c4mkmt4 =>	c4MonkMentalTraining4
+END
+
+//////////////////////////////////////////////////////////
+DEFINE_ACTION_FUNCTION skill_creation STR_VAR spellname=~~ BEGIN
+	ACTION_PHP_EACH max_level AS file => max BEGIN
+		ACTION_IF ~%file%~ STR_EQ ~%spellname%~ BEGIN
+			OUTER_FOR (now=1;now<=max;++now) BEGIN
+				OUTER_PATCH_SAVE apply x BEGIN
+					WRITE_BYTE 0 now+96
+				END
+				OUTER_SPRINT realspell ~%spellname%~^~%apply%~
+				COPY_EXISTING ~%spellname%0.spl~ ~override/%realspell%.spl~
+				IF_EXISTS
+			END
+		END
+	END
+END
+

@@ -1,0 +1,21 @@
+
+IF
+	Class(Player%n%,MONK)
+	TriggerOverride(Player%n%,Global("c4MonkDialog","Locals",1))
+	!GlobalTimerNotExpired("c4MonkStartDialogTimer","Locals")
+THEN
+	RESPONSE #100
+		SetGlobalTimer("c4MonkStartDialogTimer","Locals",3)
+		ActionOverride(Player%n%,StartDialogOverride("c4monkd",Myself))
+END
+
+IF
+	Class(Player%n%,MONK)
+	TriggerOverride(Player%n%,Global("c4MonkDialog","Locals",0))
+	TriggerOverride(Player%n%,Global("c4MonkBodyTrainingHLA","Locals",1))
+	!GlobalTimerNotExpired("c4MonkStartDialogTimer","Locals")
+THEN
+	RESPONSE #100
+		SetGlobalTimer("c4MonkStartDialogTimer","Locals",3)
+		ActionOverride(Player%n%,StartDialogOverride("c4monkd",Myself))
+END

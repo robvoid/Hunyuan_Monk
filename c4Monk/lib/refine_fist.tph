@@ -1,0 +1,181 @@
+
+
+//// 拳法
+OUTER_FOR (f=1;f<7;++f) BEGIN
+	LAF skill_creation STR_VAR spellname=~c4mkf%f%~ END
+END
+
+ADD_SECTYPE ~c4MonkColdFist~ @1001
+ADD_SECTYPE ~c4MonkFireFist~ @1001
+ADD_SECTYPE ~c4MonkElectronicFist~ @1001
+ADD_SECTYPE ~c4MonkAcidFist~ @1001
+ADD_SECTYPE ~c4MonkPiercingFist~ @1001
+ADD_SECTYPE ~c4MonkSlashingFist~ @1001
+ADD_PROJECTILE  ~%MOD_FOLDER%\pro\c4mkf2p.pro~
+
+OUTER_FOR (i=1;i<6;++i) BEGIN
+	OUTER_PATCH_SAVE level ~%i%~ BEGIN
+		WRITE_BYTE 0 THIS+48
+	END	
+	//冰
+	COPY_EXISTING ~c4mkf1%level%.spl~ override
+		// name=1101+i*10
+		// WRITE_LONG 8 RESOLVE_STR_REF ((AT %name%))
+		WRITE_BYTE 0x27 c4MonkColdFist
+		LPF ALTER_EFFECT INT_VAR match_opcode=221 parameter2=c4MonkColdFist END
+		PATCH_FOR_EACH effect IN 1 2 a BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=248 parameter1=0  STR_VAR resource=~c4mkf1%level%%effect%~ END
+		END
+		// LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=313 parameter1=0 STR_VAR resource=~c4mkrev%level%~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=206 parameter1=0 STR_VAR resource=~%SOURCE_RES%~ insert=last END
+		
+	OUTER_SET savebonus=0 -i
+	LAF CREATE_EFFECT INT_VAR opcode=40 duration=i*3+3 savingthrow=16 savebonus STR_VAR name=~c4mkf1%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=14000 savingthrow=16 savebonus STR_VAR name=~c4mkf1%level%2~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=131072 dicenumber=i dicesize=4 STR_VAR name=~c4mkf1%level%a~ END
+		
+	//火
+	COPY_EXISTING ~c4mkf2%level%.spl~ override
+		// name=1201+i*10
+		// WRITE_LONG 8 RESOLVE_STR_REF ((AT %name%))
+		WRITE_BYTE 0x27 c4MonkFireFist
+		LPF ALTER_EFFECT INT_VAR match_opcode=221 parameter2=c4MonkFireFist END
+		PATCH_FOR_EACH effect IN 1 /* a */ BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=248 parameter1=0  STR_VAR resource=~c4mkf2%level%%effect%~ END
+		END
+		// LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=313 parameter1=0 STR_VAR resource=~c4mkrev%level%~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=206 parameter1=0 STR_VAR resource=~%SOURCE_RES%~ insert=last END
+		
+	LAF CREATE_EFFECT INT_VAR opcode=146 timing=1 parameter2=1 STR_VAR name=~c4mkf2%level%1~ resource=~c4mkf2%level%1~ END	
+	// LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=524288 dicenumber=i dicesize=4 STR_VAR name=~c4mkf2%level%a~ END
+	
+	COPY_EXISTING spcl151.spl ~override/c4mkf2%level%1.spl~
+		LPF ALTER_SPELL_HEADER INT_VAR projectile=c4mkf2p END
+		LPF ALTER_EFFECT INT_VAR opcode=30 timing=0 duration=12 END
+		LPF CLONE_EFFECT INT_VAR opcode=12 timing=1 duration=0 parameter1=0 parameter2=524288 dicenumber=i dicesize=4 END
+		GET_OFFSET_ARRAY header SPL_V10_HEADERS
+		PHP_EACH header AS int => index BEGIN
+			GET_OFFSET_ARRAY2 effect index SPL_V10_HEAD_EFFECTS
+			PHP_EACH effect AS int => offset BEGIN
+				READ_SHORT offset opcode
+				PATCH_IF opcode=30 BEGIN
+					WRITE_LONG offset+4 ~-5~
+				END
+			END
+		END
+		
+	//电
+	COPY_EXISTING ~c4mkf3%level%.spl~ override
+		// name=1301+i*10
+		// WRITE_LONG 8 RESOLVE_STR_REF ((AT %name%))
+		WRITE_BYTE 0x27 c4MonkElectronicFist
+		LPF ALTER_EFFECT INT_VAR match_opcode=221 parameter2=c4MonkElectronicFist END
+		PATCH_FOR_EACH effect IN 1 2 a BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=248 parameter1=0  STR_VAR resource=~c4mkf3%level%%effect%~ END
+		END
+		// LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=313 parameter1=0 STR_VAR resource=~c4mkrev%level%~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=206 parameter1=0 STR_VAR resource=~%SOURCE_RES%~ insert=last END
+
+	LAF CREATE_EFFECT INT_VAR opcode=45 duration=i+1 probability1=i*4 STR_VAR name=~c4mkf3%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=0x500 probability1=i*4 STR_VAR name=~c4mkf3%level%2~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=262144 dicenumber=i dicesize=4 STR_VAR name=~c4mkf3%level%a~ END
+	
+	//酸 噬心
+	COPY_EXISTING ~c4mkf4%level%.spl~ override
+		// name=1401+i*10
+		// WRITE_LONG 8 RESOLVE_STR_REF ((AT %name%))
+		WRITE_BYTE 0x27 c4MonkAcidFist
+		LPF ALTER_EFFECT INT_VAR match_opcode=221 parameter2=c4MonkAcidFist END
+		PATCH_FOR_EACH effect IN 1 a BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=248 parameter1=0  STR_VAR resource=~c4mkf4%level%%effect%~ END
+		END
+		// LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=313 parameter1=0 STR_VAR resource=~c4mkrev%level%~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=206 parameter1=0 STR_VAR resource=~%SOURCE_RES%~ insert=last END
+
+	LAF CREATE_EFFECT INT_VAR opcode=0 timing=9 parameter1=~-1~ probability1=i*5 STR_VAR name=~c4mkf4%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=65536 dicenumber=i dicesize=4 STR_VAR name=~c4mkf4%level%a~ END
+	
+	//豹牙突 穿刺
+	COPY_EXISTING ~c4mkf5%level%.spl~ override
+		// name=1501+i*10
+		// WRITE_LONG 8 RESOLVE_STR_REF ((AT %name%))
+		WRITE_BYTE 0x27 c4MonkPiercingFist
+		LPF ALTER_EFFECT INT_VAR match_opcode=221 parameter2=c4MonkPiercingFist END
+		PATCH_FOR_EACH effect IN 1 2 3 4 a BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=248 parameter1=0  STR_VAR resource=~c4mkf5%level%%effect%~ END
+		END		
+		// LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=313 parameter1=0 STR_VAR resource=~c4mkrev%level%~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=206 parameter1=0 STR_VAR resource=~%SOURCE_RES%~ insert=last END
+		
+	OUTER_SET savebonus=0 -i
+	LAF CREATE_EFFECT INT_VAR opcode=38 duration=18 savingthrow=4 savebonus probability1=24 STR_VAR name=~c4mkf5%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=74 duration=18 savingthrow=4 savebonus probability1=49 probability2=25 STR_VAR name=~c4mkf5%level%2~ END
+	LAF CREATE_EFFECT INT_VAR opcode=80 duration=18 savingthrow=4 savebonus probability1=74 probability2=50 STR_VAR name=~c4mkf5%level%3~ END
+	LAF CREATE_EFFECT INT_VAR opcode=176 duration=18 savingthrow=4 savebonus probability1=100 probability2=75 STR_VAR name=~c4mkf5%level%4~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1048576 dicenumber=i dicesize=4 STR_VAR name=~c4mkf5%level%a~ END
+	
+	//疾风斩 挥砍
+	COPY_EXISTING ~c4mkf6%level%.spl~ override
+		// name=1601+i*10
+		// WRITE_LONG 8 RESOLVE_STR_REF ((AT %name%))
+		WRITE_BYTE 0x27 c4MonkSlashingFist
+		PATCH_FOR_EACH effect IN 1 a BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=248 parameter1=0 STR_VAR resource=~c4mkf6%level%%effect%~ END
+		END
+		// LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=313 parameter1=0 STR_VAR resource=~c4mkrev%level%~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=288 opcode=206 parameter1=0 STR_VAR resource=~%SOURCE_RES%~ insert=last END
+		
+	LAF CREATE_EFFECT INT_VAR opcode=146 timing=1 duration=0 parameter1=0 parameter2=1 STR_VAR name=~c4mkf6%level%1~ resource=~c4mkf6%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=16777216 dicenumber=i dicesize=4 STR_VAR name=~c4mkf6%level%a~ END
+	
+	COPY_EXISTING spcl151.spl ~override/c4mkf6%level%1.spl~
+		LPF ALTER_SPELL_HEADER INT_VAR projectile=79 range=3 END
+		LPF ALTER_EFFECT INT_VAR opcode=206 timing=0 duration=9 parameter1=0 STR_VAR resource=~%DEST_RES%~ END
+		PATCH_FOR_EACH duration IN 3 6 9 BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=206 opcode=12 timing=4 duration parameter1=i*2 parameter2=1048576 STR_VAR resource=~~ END
+		END
+
+	COPY_EXISTING_REGEXP GLOB ~c4mkf[1-6]%level%.spl~ override
+		//伤害惩罚
+		decrease=i*~-2~
+		GET_OFFSET_ARRAY header SPL_V10_HEADERS
+		PHP_EACH header AS int => index BEGIN
+			GET_OFFSET_ARRAY2 effect index SPL_V10_HEAD_EFFECTS
+			PHP_EACH effect AS int => offset BEGIN
+				READ_SHORT offset opcode
+				PATCH_IF opcode=288 BEGIN
+					WRITE_SHORT offset 278 //v3开始拳头武器更改为创建魔法武器, 改为加全局命中而非空手命中
+					WRITE_LONG offset+4 i
+				END
+				PATCH_IF opcode=289 BEGIN
+					WRITE_LONG offset+4 decrease
+				END
+			END
+		END
+END
+
+// 确保拳法加成不会被CTRL+R或其他类似法术清洗
+COPY ~.../inlined/blank.baf~ ~%OUTPUT%/c4mkfist.baf~
+
+OUTER_FOR (n=1;n<7;++n) BEGIN
+	OUTER_FOR (i=1;i<7;++i) BEGIN
+		OUTER_FOR (j=1;j<6;++j) BEGIN
+		
+			OUTER_PATCH_SAVE level ~%j%~ BEGIN
+				WRITE_BYTE 0 THIS+48
+			END
+			OUTER_SPRINT fist_spell ~c4mkf%i%%level%~
+			ACTION_PHP_EACH var_name AS file0 => string BEGIN
+				ACTION_IF ~%fist_spell%~ STRING_CONTAINS_REGEXP ~%file0%~ =0 BEGIN
+					OUTER_SPRINT variable ~%string%~
+				END
+			END
+			
+			COPY ~%OUTPUT%/c4mkfist.baf~ ~%OUTPUT%/c4mkfist.baf~
+				APPEND_FILE_EVALUATE ~%SCRIPTS%/refine_fist.baf~
+		END
+	END
+END
+
+LAF create_one_observer STR_VAR name=c4mkfist specific END
+COMPILE ~%OUTPUT%/c4mkfist.baf~

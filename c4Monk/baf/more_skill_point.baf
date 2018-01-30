@@ -1,0 +1,11 @@
+
+IF
+	Class(Player%n%,MONK)
+	TriggerOverride(Player%n%,Global("c4MonkMoreSkillPoint","Locals",1))
+THEN
+	RESPONSE #100
+		DisplayStringHead(Player%n%,%get_new_sp%)
+		ActionOverride(Player%n%,SetGlobal("c4MonkMoreSkillPoint","Locals",0))
+		ActionOverride(Player%n%,IncrementGlobal("c4MonkSkillPoint","Locals",1))
+		Continue()
+END

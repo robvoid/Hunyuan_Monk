@@ -1,0 +1,23 @@
+
+	
+COPY - ~%VERSION_CHECK%/c4fist.h~ ~%VERSION_CHECK%/c4fist.h~
+	READ_ASCII 0x2 fist (0x148)
+COPY bgmain.exe bgmain.exe
+	WRITE_ASCIIE 0x757FEC ~%fist%~ (0x148)
+BUT_ONLY
+
+COPY_EXISTING c4mk00.spl override
+	PATCH_FOR_EACH spell IN ski1 immu BEGIN
+		LPF CLONE_EFFECT INT_VAR match_opcode=37 opcode=172 STR_VAR resource=~c#mk%spell%~ END
+	END
+
+OUTER_FOR (n=1;n<7;++n) BEGIN
+	EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~%VERSION_CHECK%/reload_kit.baf~ EVAL
+END
+
+COPY_EXISTING_REGEXP GLOB ~baldur.*\.bcs~ override
+	R_B_B ~%VERSION_CHECK%/200_baldur.baf~ ~.../inlined/blank.baf~ ON_MISMATCH END
+BUT_ONLY
+
+COPY_EXISTING blank.bcs ~override/c#mkskil.bcs~
+COPY_EXISTING blank.bcs ~override/c#mkbdmt.bcs~

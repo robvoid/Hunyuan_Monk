@@ -1,0 +1,112 @@
+
+COPY_EXISTING spcl151.spl ~override/c4mkac0.spl~
+	LPF ALTER_EFFECT INT_VAR opcode=0 parameter1=0 parameter2=16 END
+	LPF CREATE_HEADERS_AS_LEVEL INT_VAR level_multiplier=2 END
+	LPF ALTER_HEADER_EFFECTS_AS_LEVEL INT_VAR parameter1=9 multi_parameter1=~-1~ END
+
+//clab
+COPY_EXISTING clabmo01.2da ~override/clabc4mk.2da~
+	COUNT_2DA_COLS cols
+	READ_2DA_ENTRIES_NOW rows cols
+	FOR (i=0;i<rows;++i) BEGIN
+		FOR (j=1;j<cols;++j) BEGIN
+			SET_2DA_ENTRY_LATER new_line i j ~****~
+		END
+	END
+	//vanilla
+	SET_2DA_ENTRY_LATER new_line 0 5 ~AP_SPCL814~
+	SET_2DA_ENTRY_LATER new_line 0 8 ~AP_SPCL816~
+	SET_2DA_ENTRY_LATER new_line 0 12 ~AP_SPCL816~
+	SET_2DA_ENTRY_LATER new_line 0 9 ~AP_SPCL817~
+	SET_2DA_ENTRY_LATER new_line 0 11 ~AP_SPCL818~
+	SET_2DA_ENTRY_LATER new_line 0 20 ~AP_SPCL821~
+	//movement rate
+	SET_2DA_ENTRY_LATER new_line 1 1 ~AP_SPCL812~
+	FOR (i=5;i<cols;i+=4) BEGIN
+		SET_2DA_ENTRY_LATER new_line 1 i ~AP_SPCL813~
+	END
+	//new
+	SET_2DA_ENTRY_LATER new_line 2 1 ~AP_C4MK00~
+	PATCH_FOR_EACH apr_col IN 3 6 9 12 15 18 24 30 BEGIN // 新拳头形式, 攻击次数手动添加
+		SET_2DA_ENTRY_LATER new_line 2 apr_col ~AP_C4MKAPR~
+	END
+	SET_2DA_ENTRY_LATER new_line 3 1 ~GA_C4MKIMMU~
+	SET_2DA_ENTRY_LATER new_line 3 2 ~GA_C4MKSKI1~
+	//bonus AC
+	FOR (i=4;i<cols;i+=4) BEGIN
+		SET_2DA_ENTRY_LATER new_line 4 i ~AP_C4MKAC1~
+	END
+	//set fist
+	FOR (i=1;i<cols;++i) BEGIN
+		SET_2DA_ENTRY_LATER new_line 5 i ~AP_C4MKFIST~
+	END
+	//base AC
+	SET_2DA_ENTRY_LATER new_line 6 1 ~AP_C4MKAC0~
+	FOR (i=2;i<cols;i+=2) BEGIN
+		SET_2DA_ENTRY_LATER new_line 6 i ~AP_C4MKAC0~
+	END
+	SET_2DA_ENTRIES_NOW new_line cols
+	PRETTY_PRINT_2DA
+		
+ACTION_IF GAME_IS ~tob bgt~ BEGIN
+	//clab
+	MOVE ~override/clabc4mk.2da~ ~override/clabmo01.2da~
+		
+	//hla
+	COPY_EXISTING - luabbr.2da override
+		READ_2DA_ENTRIES_NOW rows 2
+		FOR (i=0;i<rows;++i) BEGIN
+			READ_2DA_ENTRY_FORMER rows i 0 kitname
+			READ_2DA_ENTRY_FORMER rows i 1 string
+			PATCH_IF ~%kitname%~ STR_EQ ~MONK~ BEGIN
+				SPRINT filename ~lu%string%~
+			END
+		END
+		
+	COPY ~%MOD_FOLDER%/2da/luc4monk.2da~ ~override/%filename%.2da~
+	
+	// name and help
+  STRING_SET 45851 @1
+  STRING_SET 45858 @2
+  STRING_SET 45861 @2
+  STRING_SET 45867 @3
+			
+END ELSE ACTION_IF GAME_IS ~bgee bg2ee eet~ BEGIN		
+	//hla
+	COPY ~%MOD_FOLDER%/2da/luc4monk.2da~ override
+	
+	ADD_KIT c4Monk	
+		// CLASWEAP.2DA
+		~c4Monk 1 1 1 1 1 0 0 0~
+		// WEAPPROF.2DA
+		~c4Monk 0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+		// ABCLASRQ.2DA
+		~c4Monk 0 9 9 0 9 0~
+		// ABCLSMOD.2DA
+		~c4Monk 0 0 0 0 0 0~
+		// ABDCDSRQ.2DA
+		~c4Monk 0 0 0 0 0 0~
+		// ABDCSCRQ.2DA
+		~c4Monk 0 0 0 0 0 0~
+		// ALIGNMNT.2DA
+		~c4Monk 1 1 1 0 0 0 0 0 0~
+		// DUALCLAS.2DA
+		~c4Monk 0 0 0 0 0 0~
+		// KITLIST.2DA ABILITIES
+		~override/clabc4mk.2da~
+		// KITTABLE.2DA
+		~K_MN_H~
+		// KITLIST.2DA UNUSABLE CLASS
+		~0x00004000 20~
+		// LUABBR.2DA
+		~c4monk~
+		// 25STWEAP.2DA
+		~* * HELM19 BAG23 RING06 RING29 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 * * * POTN52,5 POTN04,2 POTN14,5 * * * ~
+		SAY @1 // KITLIST.2DA LOWER
+		SAY @2 // KITLIST.2DA MIXED
+		SAY @3 // KITLIST.2DA HELP
+	
+	INCLUDE ~%LIBS%/fl#add_kit_ee.tra~
+	LAF fl#add_kit_ee STR_VAR kit_name=c4Monk END
+END
+	

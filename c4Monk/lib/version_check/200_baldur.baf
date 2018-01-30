@@ -1,0 +1,33 @@
+
+
+IF
+  IfValidForPartyDialogue(Player1)
+  OR(6)
+    TriggerOverride(Player1,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player2,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player3,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player4,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player5,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player6,Global("c4MonkCheck","Locals",1))
+  !Exists("c#mkskil")  // ~Äñ~
+THEN
+  RESPONSE #100
+    CreateCreatureImpassable("c#mkskil",[0.0],0)
+    Continue()
+END
+
+IF
+  IfValidForPartyDialogue(Player1)
+  OR(6)
+    TriggerOverride(Player1,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player2,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player3,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player4,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player5,Global("c4MonkCheck","Locals",1))
+    TriggerOverride(Player6,Global("c4MonkCheck","Locals",1))
+  !Exists("c#mkbdmt")  // ~Äñ~
+THEN
+  RESPONSE #100
+    CreateCreatureImpassable("c#mkbdmt",[0.0],0)
+    Continue()
+END

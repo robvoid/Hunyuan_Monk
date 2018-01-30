@@ -1,0 +1,12 @@
+
+IF
+	TriggerOverride(Player%n%,Global("c4MonkCheck","Locals",1))
+	!TriggerOverride(Player%n%,Global("c4MonkVersion","Locals",%c4MonkVer%))
+THEN
+	RESPONSE #100
+		ActionOverride(Player%n%,RemoveSpellRES("c4mkimmu"))
+		ActionOverride(Player%n%,RemoveSpellRES("c4mkski1"))
+		ActionOverride(Player%n%,DestroyItem("c#mkshoe"))
+		ActionOverride(Player%n%,AddKit(%c4MonkKit%))
+		Continue()
+END
