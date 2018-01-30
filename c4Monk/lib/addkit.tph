@@ -106,7 +106,7 @@ END ELSE ACTION_IF GAME_IS ~bgee bg2ee eet~ BEGIN
 		SAY @2 // KITLIST.2DA MIXED
 		SAY @3 // KITLIST.2DA HELP
 	
-	INCLUDE ~%LIBS%/fl#add_kit_ee.tra~
+	INCLUDE ~%LIBS%/fl#add_kit_ee.tpa~
 	LAF fl#add_kit_ee STR_VAR kit_name=c4Monk END
 END
 	

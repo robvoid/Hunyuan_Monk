@@ -712,11 +712,10 @@ END
 
 /* **************************************** */
 		
-DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ specific=~~ BEGIN
+DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ BEGIN
 <<<<<<<< .../inlined/create_observer_baldur1.baf
 IF
 	InPartyAllowDead(Player%n%)
-	%specific%
 	!Exists("%name%%n%")
 THEN
 	RESPONSE #100
@@ -760,11 +759,10 @@ END
 
 /* **************************************** */
 		
-DEFINE_ACTION_FUNCTION create_one_observer STR_VAR name=~~ specific=~~ BEGIN
+DEFINE_ACTION_FUNCTION create_one_observer STR_VAR name=~~ BEGIN
 <<<<<<<< .../inlined/create_one_observer_baldur1.baf
 IF
 	InPartyAllowDead(Player1)
-	%specific%
 	!Exists("%name%")
 THEN
 	RESPONSE #100

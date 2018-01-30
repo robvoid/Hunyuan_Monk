@@ -25,15 +25,6 @@ END ELSE BEGIN
 END
 
 //////////////////////////////////////////////////////////
-OUTER_SPRINT specific ~OR(6) 
-TriggerOverride(Player1,Global("c4MonkCheck","Locals",1))
-TriggerOverride(Player2,Global("c4MonkCheck","Locals",1))
-TriggerOverride(Player3,Global("c4MonkCheck","Locals",1))
-TriggerOverride(Player4,Global("c4MonkCheck","Locals",1))
-TriggerOverride(Player5,Global("c4MonkCheck","Locals",1))
-TriggerOverride(Player6,Global("c4MonkCheck","Locals",1))~
-
-//////////////////////////////////////////////////////////
 ACTION_DEFINE_ASSOCIATIVE_ARRAY max_level BEGIN
 	c4mkf1 =>	5
 	c4mkf2 =>	5

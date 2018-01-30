@@ -177,5 +177,5 @@ OUTER_FOR (n=1;n<7;++n) BEGIN
 	END
 END
 
-LAF create_one_observer STR_VAR name=c4mkfist specific END
+LAF create_one_observer STR_VAR name=c4mkfist END
 COMPILE ~%OUTPUT%/c4mkfist.baf~

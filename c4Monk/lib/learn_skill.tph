@@ -34,5 +34,5 @@ COPY_EXISTING c4mkski2.spl override
 	
 LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkski2 variable=c4MonkMoreSkillPoint END
 
-LAF create_one_observer STR_VAR name=c4mkskil specific END
+LAF create_one_observer STR_VAR name=c4mkskil END
 COMPILE ~%OUTPUT%/c4mkskil.baf~
