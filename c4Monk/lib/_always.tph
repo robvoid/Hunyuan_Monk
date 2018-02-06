@@ -13,6 +13,7 @@ OUTER_SPRINT VERSION_CHECK ~%LIBS%/version_check~
 INCLUDE ~%LIBS%/_functions.tpa~
 
 OUTER_SET c4MonkVer=300
+// OUTER_SPRINT conditions ~TriggerOverride(Player%slot%,Global("c4MonkCheck","Locals",1))~
 	
 ACTION_IF GAME_IS ~BGEE BG2EE EET~ BEGIN
 	OUTER_SPRINT c4MonkKit ~c4Monk~

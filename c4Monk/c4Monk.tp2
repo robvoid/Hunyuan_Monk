@@ -1,7 +1,7 @@
 BACKUP ~c4monk/backup~
 AUTHOR ~c4demon@gmail.com~
 
-VERSION ~v3.0~
+VERSION ~v3.1~
 AUTO_EVAL_STRINGS
 
 README ~c4monk/Languages/%LANGUAGE%/readme.txt~
@@ -65,15 +65,10 @@ INCLUDE ~%LIBS%/create_fists.tph~
 INCLUDE ~%LIBS%/refine_fist.tph~
 	
 // Practice
-COPY ~.../inlined/blank.baf~ ~%OUTPUT%/c4mkcomb.baf~
-	FOR (n=1;n<7;++n) BEGIN
-		APPEND_FILE_EVALUATE ~%SCRIPTS%/see_enemy_check.baf~
-	END
-	APPEND_FILE_EVALUATE ~%SCRIPTS%/see_enemy_end.baf~
-	
 INCLUDE ~%LIBS%/learn_skill.tph~
 INCLUDE ~%LIBS%/body_training.tph~
 INCLUDE ~%LIBS%/mental_training.tph~
+INCLUDE ~%LIBS%/observers.tph~
 
 // HLAs
 INCLUDE ~%LIBS%/HLAs.tph~

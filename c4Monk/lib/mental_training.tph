@@ -14,13 +14,6 @@ OUTER_FOR (x=1;x<5;++x) BEGIN
 		LPF ALTER_EFFECT INT_VAR timing=9 duration=0 END
 		LPF ALTER_EFFECT INT_VAR match_opcode=215 timing=0 duration=1 END
 		LPF CLONE_EFFECT INT_VAR multi_match=1 match_timing=9 opcode=206 parameter1=0 parameter2=0 STR_VAR resource=~c4mkmt%x%a~ insert=last END
-		
-	COPY ~.../inlined/blank.baf~ ~%OUTPUT%/mental_skill.baf~
-		FOR (n=1;n<7;++n) BEGIN
-			APPEND_FILE_EVALUATE ~%SCRIPTS%/mental_stuff.baf~
-		END
-		
-	EXTEND_BOTTOM ~c4mkskil.bcs~ ~%OUTPUT%/mental_skill.baf~
 END
 
 //EE»ìÂÒÃüÁîµÄ#328

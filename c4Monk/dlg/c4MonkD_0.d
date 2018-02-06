@@ -137,10 +137,18 @@ IF ~~ THEN BEGIN mentaltraining
 	+ ~GlobalGT("c4MonkMentalTraining1","Locals",1) LevelLT(Myself,8)~ + @303 + gotskillpoint
 	+ ~GlobalGT("c4MonkMentalTraining2","Locals",1) LevelLT(Myself,16)~ + @303 + gotskillpoint
 	+ ~GlobalGT("c4MonkMentalTraining3","Locals",1) LevelLT(Myself,24)~ + @303 + gotskillpoint
-	+ ~Global("c4MonkMentalTraining1","Locals",0)~ + @311 DO ~SetGlobal("c4MonkMentalTraining1","Locals",1)~ + done
-	+ ~Global("c4MonkMentalTraining2","Locals",0) GlobalGT("c4MonkMentalTraining1","Locals",0) !LevelLT(Myself,8)~ + @312 DO ~SetGlobal("c4MonkMentalTraining2","Locals",1)~ + done
-	+ ~Global("c4MonkMentalTraining3","Locals",0) GlobalGT("c4MonkMentalTraining2","Locals",0) !LevelLT(Myself,16)~ + @313 DO ~SetGlobal("c4MonkMentalTraining3","Locals",1)~ + done
-	+ ~Global("c4MonkMentalTraining4","Locals",0) GlobalGT("c4MonkMentalTraining3","Locals",0) !LevelLT(Myself,24)~ + @314 DO ~SetGlobal("c4MonkMentalTraining4","Locals",1)~ + done
+	+ ~Global("c4MonkMentalTraining1","Locals",0)~ + @311 DO ~
+		SetGlobal("c4MonkMentalTraining1","Locals",1)
+		ReallyForceSpellRES("c4mkmt1a",Myself)~ + done
+	+ ~Global("c4MonkMentalTraining2","Locals",0) GlobalGT("c4MonkMentalTraining1","Locals",0) !LevelLT(Myself,8)~ + @312 DO ~
+		SetGlobal("c4MonkMentalTraining2","Locals",1)
+		ReallyForceSpellRES("c4mkmt2a",Myself)~ + done
+	+ ~Global("c4MonkMentalTraining3","Locals",0) GlobalGT("c4MonkMentalTraining2","Locals",0) !LevelLT(Myself,16)~ + @313 DO ~
+		SetGlobal("c4MonkMentalTraining3","Locals",1)
+		ReallyForceSpellRES("c4mkmt3a",Myself)~ + done
+	+ ~Global("c4MonkMentalTraining4","Locals",0) GlobalGT("c4MonkMentalTraining3","Locals",0) !LevelLT(Myself,24)~ + @314 DO ~
+		SetGlobal("c4MonkMentalTraining4","Locals",1)
+		ReallyForceSpellRES("c4mkmt4a",Myself)~ + done
 	++ @104 + gotskillpoint
 END
 

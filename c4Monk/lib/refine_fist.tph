@@ -154,28 +154,3 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		END
 END
 
-// 确保拳法加成不会被CTRL+R或其他类似法术清洗
-COPY ~.../inlined/blank.baf~ ~%OUTPUT%/c4mkfist.baf~
-
-OUTER_FOR (n=1;n<7;++n) BEGIN
-	OUTER_FOR (i=1;i<7;++i) BEGIN
-		OUTER_FOR (j=1;j<6;++j) BEGIN
-		
-			OUTER_PATCH_SAVE level ~%j%~ BEGIN
-				WRITE_BYTE 0 THIS+48
-			END
-			OUTER_SPRINT fist_spell ~c4mkf%i%%level%~
-			ACTION_PHP_EACH var_name AS file0 => string BEGIN
-				ACTION_IF ~%fist_spell%~ STRING_CONTAINS_REGEXP ~%file0%~ =0 BEGIN
-					OUTER_SPRINT variable ~%string%~
-				END
-			END
-			
-			COPY ~%OUTPUT%/c4mkfist.baf~ ~%OUTPUT%/c4mkfist.baf~
-				APPEND_FILE_EVALUATE ~%SCRIPTS%/refine_fist.baf~
-		END
-	END
-END
-
-LAF create_one_observer STR_VAR name=c4mkfist END
-COMPILE ~%OUTPUT%/c4mkfist.baf~

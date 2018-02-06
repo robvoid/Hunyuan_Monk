@@ -712,22 +712,24 @@ END
 
 /* **************************************** */
 		
-DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ BEGIN
+// DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ BEGIN
+DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ conditions=~~ BEGIN
 <<<<<<<< .../inlined/create_observer_baldur1.baf
 IF
-	InPartyAllowDead(Player%n%)
-	!Exists("%name%%n%")
+	InPartyAllowDead(Player%slot%)
+	%conditions%
+	!Exists("%name%%slot%")
 THEN
 	RESPONSE #100
-		CreateCreatureImpassable("%name%%n%",[1.1],0)
+		CreateCreatureImpassable("%name%%slot%",[1.1],0)
 		Continue()
 END
 >>>>>>>>
 
 	OUTER_SET namelength = STRING_LENGTH ~%name%~
 	ACTION_IF namelength>0 && namelength<8 BEGIN
-		OUTER_FOR (n=1;n<7;n+=1) BEGIN
-			COPY_EXISTING bird.cre ~override\%name%%n%.cre~
+		OUTER_FOR (slot=1;slot<7;slot+=1) BEGIN
+			COPY_EXISTING bird.cre ~override\%name%%slot%.cre~
 				LPF ADD_CRE_EFFECT INT_VAR opcode = 293 timing = 9 target = 1 parameter2 = 1 END
 				LPF ADD_CRE_EFFECT INT_VAR opcode = 66 timing = 9 target = 1 parameter1 = 255 END
 				LPF ADD_CRE_EFFECT INT_VAR opcode = 287 timing = 9 target = 1 END
@@ -738,17 +740,17 @@ END
 				WRITE_BYTE 0x53 1
 				WRITE_BYTE 0x270 0x80
 				WRITE_ASCIIE 0xa4 ~~ #400
-				WRITE_ASCIIE 0x248 ~%name%%n%~ #40
-				WRITE_ASCIIE 0x280 ~%name%%n%~ #32
+				WRITE_ASCIIE 0x248 ~%name%%slot%~ #40
+				WRITE_ASCIIE 0x280 ~%name%%slot%~ #32
 			COPY_EXISTING blank.bcs ~override/c4obtemp.bcs~
 			EXTEND_BOTTOM ~c4obtemp.bcs~ ~.../inlined/create_observer_baldur1.baf~ EVAL EVAL
 			COPY_EXISTING_REGEXP GLOB ~baldur.*\.bcs~ override
 				R_B_B ~override/c4obtemp.bcs~ ~override/blank.bcs~ ON_MISMATCH END
 			BUT_ONLY
 			EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~.../inlined/create_observer_baldur1.baf~ EVAL EVAL
-			MOVE ~override/c4obtemp.bcs~ ~%MOD_FOLDER%/backup/%name%%n%_baldur.bcs~
+			MOVE ~override/c4obtemp.bcs~ ~%MOD_FOLDER%/backup/%name%%slot%_baldur.bcs~
 			
-			COPY_EXISTING blank.bcs ~override/%name%%n%.bcs~
+			COPY_EXISTING blank.bcs ~override/%name%%slot%.bcs~
 		END
 	END ELSE BEGIN
 		PRINT ~Wrong creature name specified !!~
@@ -759,10 +761,12 @@ END
 
 /* **************************************** */
 		
-DEFINE_ACTION_FUNCTION create_one_observer STR_VAR name=~~ BEGIN
+// DEFINE_ACTION_FUNCTION create_one_observer STR_VAR name=~~ BEGIN
+DEFINE_ACTION_FUNCTION create_one_observer STR_VAR name=~~ conditions=~~ BEGIN
 <<<<<<<< .../inlined/create_one_observer_baldur1.baf
 IF
 	InPartyAllowDead(Player1)
+	%conditions%
 	!Exists("%name%")
 THEN
 	RESPONSE #100
