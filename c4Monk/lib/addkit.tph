@@ -1,6 +1,6 @@
 
-COPY_EXISTING spcl151.spl ~override/c4mkac0.spl~
-	LPF ALTER_EFFECT INT_VAR opcode=0 parameter1=0 parameter2=16 END
+//基础AC
+COPY_EXISTING c4mkac0.spl override
 	LPF CREATE_HEADERS_AS_LEVEL INT_VAR level_multiplier=2 END
 	LPF ALTER_HEADER_EFFECTS_AS_LEVEL INT_VAR parameter1=9 multi_parameter1=~-1~ END
 
@@ -13,37 +13,45 @@ COPY_EXISTING clabmo01.2da ~override/clabc4mk.2da~
 			SET_2DA_ENTRY_LATER new_line i j ~****~
 		END
 	END
-	//vanilla
-	SET_2DA_ENTRY_LATER new_line 0 5 ~AP_SPCL814~
-	SET_2DA_ENTRY_LATER new_line 0 8 ~AP_SPCL816~
+	//原版能力
+	SET_2DA_ENTRY_LATER new_line 0 5 ~AP_SPCL814~ //免疫疾病和加减速
+	SET_2DA_ENTRY_LATER new_line 0 8 ~AP_SPCL816~ //速度因子
 	SET_2DA_ENTRY_LATER new_line 0 12 ~AP_SPCL816~
-	SET_2DA_ENTRY_LATER new_line 0 9 ~AP_SPCL817~
-	SET_2DA_ENTRY_LATER new_line 0 11 ~AP_SPCL818~
-	SET_2DA_ENTRY_LATER new_line 0 20 ~AP_SPCL821~
-	//movement rate
+	SET_2DA_ENTRY_LATER new_line 0 9 ~AP_SPCL817~ //免疫魅惑
+	SET_2DA_ENTRY_LATER new_line 0 11 ~AP_SPCL818~ //免疫中毒
+	SET_2DA_ENTRY_LATER new_line 0 20 ~AP_SPCL821~ //免疫普通武器
+	//移动速度
 	SET_2DA_ENTRY_LATER new_line 1 1 ~AP_SPCL812~
 	FOR (i=5;i<cols;i+=4) BEGIN
 		SET_2DA_ENTRY_LATER new_line 1 i ~AP_SPCL813~
 	END
-	//new
-	SET_2DA_ENTRY_LATER new_line 2 1 ~AP_C4MK00~
-	PATCH_FOR_EACH apr_col IN 3 6 9 12 15 18 24 30 BEGIN // 新拳头形式, 攻击次数手动添加
+	//新能力
+	SET_2DA_ENTRY_LATER new_line 2 1 ~AP_C4MK00~ //被动
+	// 新拳头形式, 攻击次数手动添加. EE中武僧18级前攻击次数似乎为硬编码, 无须单独添加
+	PATCH_FOR_EACH apr_col IN 24 30 BEGIN 
 		SET_2DA_ENTRY_LATER new_line 2 apr_col ~AP_C4MKAPR~
 	END
+	PATCH_IF GAME_IS ~tob bgt~ BEGIN
+		PATCH_FOR_EACH apr_col IN 3 6 9 12 15 18 BEGIN 
+			SET_2DA_ENTRY_LATER new_line 2 apr_col ~AP_C4MKAPR~
+		END
+	END
+	//元神出窍
 	SET_2DA_ENTRY_LATER new_line 3 1 ~GA_C4MKIMMU~
+	//技能学习
 	SET_2DA_ENTRY_LATER new_line 3 2 ~GA_C4MKSKI1~
-	//bonus AC
-	FOR (i=4;i<cols;i+=4) BEGIN
-		SET_2DA_ENTRY_LATER new_line 4 i ~AP_C4MKAC1~
-	END
-	//set fist
+	//设置拳头
 	FOR (i=1;i<cols;++i) BEGIN
-		SET_2DA_ENTRY_LATER new_line 5 i ~AP_C4MKFIST~
+		SET_2DA_ENTRY_LATER new_line 4 i ~AP_C4MKFIST~
 	END
-	//base AC
-	SET_2DA_ENTRY_LATER new_line 6 1 ~AP_C4MKAC0~
+ 	//基础AC
+	SET_2DA_ENTRY_LATER new_line 5 1 ~AP_C4MKAC0~
 	FOR (i=2;i<cols;i+=2) BEGIN
-		SET_2DA_ENTRY_LATER new_line 6 i ~AP_C4MKAC0~
+		SET_2DA_ENTRY_LATER new_line 5 i ~AP_C4MKAC0~
+	END
+	//额外AC加成
+	FOR (i=4;i<cols;i+=4) BEGIN
+		SET_2DA_ENTRY_LATER new_line 6 i ~AP_C4MKAC1~
 	END
 	SET_2DA_ENTRIES_NOW new_line cols
 	PRETTY_PRINT_2DA
@@ -65,13 +73,13 @@ ACTION_IF GAME_IS ~tob bgt~ BEGIN
 		
 	COPY ~%MOD_FOLDER%/2da/luc4monk.2da~ ~override/%filename%.2da~
 	
-	// name and help
+	// 字符串
   STRING_SET 45851 @1
   STRING_SET 45858 @2
   STRING_SET 45861 @2
   STRING_SET 45867 @3
 			
-END ELSE ACTION_IF GAME_IS ~bgee bg2ee eet~ BEGIN		
+END ELSE ACTION_IF GAME_IS ~bgee bg2ee eet iwdee~ BEGIN		
 	//hla
 	COPY ~%MOD_FOLDER%/2da/luc4monk.2da~ override
 	
@@ -101,12 +109,16 @@ END ELSE ACTION_IF GAME_IS ~bgee bg2ee eet~ BEGIN
 		// LUABBR.2DA
 		~c4monk~
 		// 25STWEAP.2DA
-		~* * HELM19 BAG23 RING06 RING29 CLCK02 BOOT01 AMUL19 BRAC16 BELT06 * * * POTN52,5 POTN04,2 POTN14,5 * * * ~
+		~* * HELM19 BAG23 RING06 RING29 CLCK02 BOOT01 AMUL19 BRAC19 BELT06 * * * POTN52,5 POTN04,2 POTN14,5 * * * ~
 		SAY @1 // KITLIST.2DA LOWER
 		SAY @2 // KITLIST.2DA MIXED
 		SAY @3 // KITLIST.2DA HELP
 	
 	INCLUDE ~%LIBS%/fl#add_kit_ee.tpa~
-	LAF fl#add_kit_ee STR_VAR kit_name=c4Monk END
+	LAF fl#add_kit_ee STR_VAR
+		kit_name=c4Monk
+		thiefskl=~0 0~
+		thiefscl=~0 0 0 0 0 0 0 0~
+	END
 END
 	

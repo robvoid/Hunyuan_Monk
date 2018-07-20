@@ -1,7 +1,6 @@
 
 ////身法
 LAF skill_creation STR_VAR spellname=c4mkbd END
-ADD_SECTYPE ~c4MonkBodyTraining~ @206
 
 OUTER_FOR (i=1;i<6;++i) BEGIN
 	OUTER_PATCH_SAVE level ~%i%~ BEGIN
@@ -14,6 +13,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		LPF ALTER_SPELL_HEADER STR_VAR icon=C4MKBD END
 		name=i+200
 		WRITE_LONG 8 RESOLVE_STR_REF ((AT %name%))
+		SAY 12 @209
 		LPF ALTER_EFFECT STR_VAR resource=~c4mkbd%level%~ END	
 		
 	//使用的表格
@@ -26,39 +26,56 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	COPY_EXISTING c4mkbd1.spl ~override/c4mkbd1%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD1
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD1 END
-		WRITE_BYTE 0x27 c4MonkBodyTraining
 		SAY NAME1 @211
-		LPF ALTER_EFFECT INT_VAR match_timing=0 duration=30+30*i parameter1=10*i END
-		LPF CLONE_EFFECT INT_VAR match_opcode=86 opcode=221 timing=1 duration=0 parameter1=0 parameter2=c4MonkBodyTraining STR_VAR insert=first resource=~~ END
-		// LPF CLONE_EFFECT INT_VAR match_opcode=221 opcode=215 parameter2=0 STR_VAR resource=spstones insert=below END
+		PATCH_FOR_EACH match_opcode IN 86 87 88 89 BEGIN
+			LPF ALTER_EFFECT INT_VAR match_opcode duration=30+30*i parameter1=10*i END
+		END
+		LPF ALTER_EFFECT INT_VAR match_opcode=142 duration=30+30*i END
+		FOR (bd=1;bd<4;++bd) BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd%bd%%level%~ END
+		END
 	
 	//真元护体
 	COPY_EXISTING c4mkbd2.spl ~override/c4mkbd2%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD2
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD2 END
-		WRITE_BYTE 0x27 c4MonkBodyTraining
 		SAY NAME1 @221
-		LPF ALTER_EFFECT INT_VAR match_timing=0 duration=30+30*i parameter1=15*i END
+		PATCH_FOR_EACH match_opcode IN 27 28 29 30 31 84 85 BEGIN
+			LPF ALTER_EFFECT INT_VAR match_opcode duration=30+30*i parameter1=15*i END
+		END
+		LPF ALTER_EFFECT INT_VAR match_opcode=142 duration=30+30*i END
+		FOR (bd=1;bd<4;++bd) BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd%bd%%level%~ END
+		END
 		// LPF CLONE_EFFECT INT_VAR match_opcode=27 opcode=155 parameter1=0 END 
-		LPF CLONE_EFFECT INT_VAR match_opcode=27 opcode=221 timing=1 duration=0 parameter1=0 parameter2=c4MonkBodyTraining STR_VAR insert=first resource=~~ END
 	
 	//天罡战气
 	COPY_EXISTING c4mkbd3.spl ~override/c4mkbd3%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD3
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD3 END
-		WRITE_BYTE 0x27 c4MonkBodyTraining
 		SAY NAME1 @231
 		LPF ALTER_EFFECT INT_VAR match_timing=0 duration=30+30*i END
 		LPF ALTER_EFFECT INT_VAR match_opcode=146 STR_VAR resource=~c4mkbd3%i%~ END
-		LPF CLONE_EFFECT INT_VAR match_opcode=146 opcode=221 timing=1 duration=0 parameter1=0 parameter2=c4MonkBodyTraining STR_VAR insert=first resource=~~ END
 		total_effect=(30+30*i) / 6
 		FOR (j=1;j<total_effect;++j) BEGIN
 			delay=j*6
 			LPF CLONE_EFFECT INT_VAR match_opcode=146 match_timing=1 timing=4 duration=delay STR_VAR insert=last END
 		END
-		// LPF CLONE_EFFECT INT_VAR match_opcode=221 opcode=215 timing=0 duration=1 parameter2=0 STR_VAR resource=SPGRWHRL END
+		FOR (bd=1;bd<4;++bd) BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd%bd%%level%~ END
+		END
+
+	COPY_EXISTING INAREAPA.pro ~override/c4mkbd3p.pro~
+		WRITE_SHORT 0xa		0xff
+		WRITE_SHORT 0x204 THIS*2
+		WRITE_SHORT 0x206 THIS*2
+	ADD_PROJECTILE ~override/c4mkbd3p.pro~
 		
 	COPY_EXISTING c4mkbd3_.spl ~override/c4mkbd3%i%.spl~
+		LPF ALTER_SPELL_HEADER INT_VAR projectile=c4mkbd3p END
+		PATCH_FOR_EACH bd IN 1 2 3 4 5 y BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd3%bd%~ END
+		END
 		LPF ALTER_EFFECT INT_VAR match_timing=0 duration=6 END
 		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
 		LPF ALTER_EFFECT INT_VAR match_opcode=73 parameter1=i*2 END
@@ -67,7 +84,7 @@ END
 
 
 ////高等身法
-COPY_EXISTING spcl151.spl ~override/c4mkbdx.spl~
+COPY_EXISTING spcl819.spl ~override/c4mkbdx.spl~
 	SAY NAME1 @2007
 	SAY UNIDENTIFIED_DESC @2008
 	WRITE_ASCII 0x3a c4mkbdxb
@@ -85,6 +102,7 @@ COPY ~%MOD_FOLDER%/2da/c4mkbd0.2da~ ~override/c4mkbdx.2da~
 	
 COPY_EXISTING ~c4mkbd0-.spl~ ~override/c4mkbdx-.spl~
 	SAY NAME1 @2007
+	SAY UNIDENTIFIED_DESC @2008
 	LPF ALTER_EFFECT STR_VAR resource=~c4mkbdx~ END
 	
 OUTER_SET	bdx_duration=300
@@ -92,6 +110,9 @@ OUTER_SET	bdx_duration=300
 //铁布衫
 COPY_EXISTING c4mkbd1e.spl ~override/c4mkbd1x.spl~
 	SAY NAME1 @212
+	FOR (bd=1;bd<4;++bd) BEGIN
+		LPF ALTER_EFFECT STR_VAR match_resource=~c4mkbd%bd%e~ resource=~c4mkbd%bd%x~ END
+	END
 	LPF ALTER_EFFECT INT_VAR match_parameter1=50 parameter1=65 END
 	LPF ALTER_EFFECT INT_VAR match_timing=0 duration=bdx_duration END
 	LPF CLONE_EFFECT INT_VAR match_opcode=86 opcode=146 timing=1 duration=0 parameter1=0 parameter2=1 STR_VAR resource=c4mkbd1y insert=last END
@@ -101,19 +122,24 @@ COPY_EXISTING c4mkbd1e.spl ~override/c4mkbd1x.spl~
 		LPF CLONE_EFFECT INT_VAR match_opcode=146 match_timing=1 timing=4 duration=delay STR_VAR insert=last END
 	END
 	
-COPY_EXISTING spcl151.spl ~override/c4mkbd1y.spl~
-	WRITE_BYTE 0x27 c4MonkBodyTraining
+COPY_EXISTING spcl819.spl ~override/c4mkbd1y.spl~
 	LPF ALTER_EFFECT INT_VAR opcode=218 timing=10 duration=100 parameter1=1 END
 	
 //真元护体
 COPY_EXISTING c4mkbd2e.spl ~override/c4mkbd2x.spl~
 	SAY NAME1 @222
+	FOR (bd=1;bd<4;++bd) BEGIN
+		LPF ALTER_EFFECT STR_VAR match_resource=~c4mkbd%bd%e~ resource=~c4mkbd%bd%x~ END
+	END
 	LPF ALTER_EFFECT INT_VAR match_parameter1=75 parameter1=100 END
 	LPF ALTER_EFFECT INT_VAR match_timing=0 duration=bdx_duration END
 	
 //天罡战气
 COPY_EXISTING c4mkbd3e.spl ~override/c4mkbd3x.spl~
 	SAY NAME1 @232
+	FOR (bd=1;bd<4;++bd) BEGIN
+		LPF ALTER_EFFECT STR_VAR match_resource=~c4mkbd%bd%e~ resource=~c4mkbd%bd%x~ END
+	END
 	LPF ALTER_EFFECT INT_VAR match_opcode=146 STR_VAR resource=c4mkbd3y END
 	LPF DELETE_EFFECT INT_VAR match_timing=4 END
 	total_effect=bdx_duration / 6
@@ -125,4 +151,4 @@ COPY_EXISTING c4mkbd3e.spl ~override/c4mkbd3x.spl~
 COPY_EXISTING c4mkbd35.spl ~override/c4mkbd3y.spl~
 	LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=250 parameter1=3 END
 	LPF CLONE_EFFECT INT_VAR match_opcode=73 opcode=1 parameter1=6 END
-	
+

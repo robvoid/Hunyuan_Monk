@@ -339,7 +339,7 @@ BEGIN
 						next += 1
 					END
 					PATCH_IF rlevel_next = required_level BEGIN
-						PATCH_WARN ~A header with required leve %required_level% already exists, patch skipped !!~
+						PATCH_PRINT ~A header with required leve %required_level% already exists, patch skipped !!~
 						insert = 0
 						next = header_count + 1
 					END
@@ -391,13 +391,13 @@ DEFINE_PATCH_FUNCTION CREATE_HEADERS_AS_LEVEL
 		level_multiplier = 1 
 BEGIN
 	
-  READ_SHORT	0x68	header_count
+  // READ_SHORT	0x68	header_count
 	
   PATCH_IF 
 				(max_level > 1)
 		&&	(level_increment > 0)
 		&&	(level_multiplier > 0)
-		&&	(header_count = 1) 
+		// &&	(header_count = 1) 
 	BEGIN
 		FOR (required_level=level_increment; required_level<=max_level; required_level+=level_multiplier) BEGIN
 			LPF CLONE_SPELL_HEADER INT_VAR required_level END
@@ -619,6 +619,8 @@ DEFINE_PATCH_FUNCTION ADD_ITEM_HEADER
 	RET
 		new_header 								 /* 新建的头部位置, 供ADD_ITEM_EFFECT调用 */
 BEGIN
+		LPF FJ_SPL_ITM_REINDEX END
+		
 		PATCH_IF STRING_LENGTH ~%DEST_EXT%~ >0 BEGIN
 			SPRINT item_name ~%DEST_RES%~
 		END ELSE SPRINT item_name ~%SOURCE_RES%~
@@ -678,6 +680,7 @@ BEGIN
 		END
 		
 		PATCH_IF (STRING_LENGTH ~%name%~)>0 THEN BEGIN
+		
 			SNPRINT 1 tra ~%name%~ 
 			PATCH_IF ~%tra%~ STR_EQ ~@~ THEN BEGIN
 				len=STRING_LENGTH ~%name%~
@@ -690,22 +693,23 @@ BEGIN
 				SPRINT strref ~%name%~
 				index = RESOLVE_STR_REF (~%strref%~)
 			END
-		END
 		
-		PATCH_IF new_header<4 THEN BEGIN		
-			INNER_ACTION BEGIN
-				APPEND TOOLTIP.2da ~%item_name% -1 -1 -1~ UNLESS ~%item_name%~
-				COPY_EXISTING TOOLTIP.2da override
-					READ_2DA_ENTRIES_NOW rows 4
-					FOR (i=0;i<rows;i+=1) BEGIN
-						READ_2DA_ENTRY_FORMER rows i 0 item
-						PATCH_IF ~%item%~ STR_EQ ~%item_name%~ THEN BEGIN
-							SET_2DA_ENTRY_LATER set i new_header index
+			PATCH_IF new_header<4 THEN BEGIN		
+				INNER_ACTION BEGIN
+					APPEND TOOLTIP.2da ~%item_name% -1 -1 -1~ UNLESS ~%item_name%~
+					COPY_EXISTING TOOLTIP.2da override
+						READ_2DA_ENTRIES_NOW rows 4
+						FOR (i=0;i<rows;i+=1) BEGIN
+							READ_2DA_ENTRY_FORMER rows i 0 item
+							PATCH_IF ~%item%~ STR_EQ ~%item_name%~ THEN BEGIN
+								SET_2DA_ENTRY_LATER set i new_header index
+							END
 						END
-					END
-					SET_2DA_ENTRIES_NOW set 4
-				BUT_ONLY
+						SET_2DA_ENTRIES_NOW set 4
+					BUT_ONLY
+				END
 			END
+			
 		END
 END
 

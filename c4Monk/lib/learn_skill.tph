@@ -1,7 +1,7 @@
 
 COPY ~c4monk/dlg/c4MonkD_0.d~ ~c4monk/dlg/c4MonkD.d~
-	// REPLACE_TEXTUALLY "DO ~\(.*\)~" "DO ~\1~ %INSTANT_ACTIONS_FLAGS%"
-	// REPLACE_TEXTUALLY "\([^%]\)SetGlobal(\(.*\))" "\1%INSTANT_ACTIONS_TOBEX%SetGlobal(\2)"
+	REPLACE_TEXTUALLY "DO ~\(.*\)~" "DO ~\1~ %INSTANT_ACTIONS_FLAGS%"
+	REPLACE_TEXTUALLY "\([^%]\)SetGlobal(\(.*\))" "\1%INSTANT_ACTIONS_TOBEX%SetGlobal(\2)"
 
 COMPILE ~%MOD_FOLDER%/dlg/c4MonkD.d~
 	

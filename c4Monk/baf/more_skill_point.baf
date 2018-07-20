@@ -1,6 +1,6 @@
 
 IF
-	Class(Player%n%,MONK)
+	Kit(Player%n%,c4Monk)
 	TriggerOverride(Player%n%,Global("c4MonkMoreSkillPoint","Locals",1))
 THEN
 	RESPONSE #100

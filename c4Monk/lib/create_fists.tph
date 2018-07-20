@@ -10,7 +10,7 @@ OUTER_SET enchant_count=0
 
 OUTER_FOR (i=1;i<51;++i) BEGIN
 	/* create fists */
-	COPY_EXISTING c4fist0.itm ~override/c4fist%i%.itm~
+	COPY ~%MOD_FOLDER%/itm/c4fist0.itm~ ~override/c4fist%i%.itm~
 		FOR (m=gap_max;m<51;m+=gap_max) BEGIN
 			PATCH_IF m=i BEGIN
 				dicesize+=1
@@ -34,21 +34,19 @@ OUTER_FOR (i=1;i<51;++i) BEGIN
 		name= RESOLVE_STR_REF ((AT j))
 		WRITE_LONG NAME2 name
 		WRITE_LONG 0x60 enchant_count
-		LPF ALTER_EFFECT INT_VAR match_opcode=233 parameter1=enchant_count END
+		// LPF ALTER_EFFECT INT_VAR match_opcode=233 parameter1=enchant_count END
 		PATCH_IF enchant_count>0 BEGIN
       WRITE_BYTE 0x18 THIS BOR 0b01000000
 		END
 		//伤害修正
 		LPF ALTER_ITEM_HEADER INT_VAR thac0_bonus END
 		LPF ALTER_ITEM_HEADER INT_VAR dicesize damage_bonus END
-		//mark
-		LPF CLONE_EFFECT INT_VAR parameter1=8 parameter2=111 END
 		
 	OUTER_SET x = i -1
 	OUTER_SET ~num_%x%~=i
 END
 		
-/* create spells to "equip" fist as magic weapon at every level */
+/* 表格中设置拳头的法术 */
 COPY_EXISTING c4mkfist.spl override
 	LPF CREATE_HEADERS_AS_LEVEL END
 	LPF ALTER_HEADER_EFFECTS_AS_LEVEL STR_VAR resource=c4fist suffix_array= num END

@@ -1,11 +1,3 @@
-//额外技能点
-COPY_EXISTING c4mkski2.spl override
-	WRITE_ASCII 0x3a c4mkskib
-	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkskib END
-	SAY NAME1 @2019
-	SAY UNIDENTIFIED_DESC @2020
-	
-LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkski2 variable=c4MonkMoreSkillPoint END
 
 //乱舞
 COPY_EXISTING c4mkrage.spl override
@@ -24,18 +16,8 @@ COPY_EXISTING c4mksnif.spl override
 	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mksnib END
 	SAY NAME1 @2003
 	SAY UNIDENTIFIED_DESC @2004
-	PATCH_IF GAME_IS ~soa tob bgt~ BEGIN
-		FOR (snif=387;snif<396;++snif) BEGIN
-			PATCH_IF snif != 389 BEGIN
-				LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=318 parameter1=5 parameter2=snif STR_VAR insert=last resource=~~ END
-			END
-		END
-	END ELSE PATCH_IF GAME_IS ~bgee bg2ee eet~ BEGIN
-		FOR (snif=1;snif<11;++snif) BEGIN
-			PATCH_IF snif != 9 BEGIN
-				LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=332 parameter1=5 parameter2=snif STR_VAR insert=last resource=~~ END
-			END
-		END
+	PATCH_FOR_EACH dmgtype IN 1 2 3 4 BEGIN
+		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=332 parameter1=5 parameter2=dmgtype STR_VAR resource=~~ END
 	END
 
 //回溯	
@@ -44,77 +26,90 @@ COPY_EXISTING c4mkrevi.spl override
 	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkrevb END
 	SAY NAME1 @2005
 	SAY UNIDENTIFIED_DESC @2006
-	LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=73 parameter1=2 parameter2=0 STR_VAR insert=last resource=~~ END
+	LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=289 parameter1=2 parameter2=0 STR_VAR resource=~~ END
+	
+//额外技能点
+COPY_EXISTING c4mkski2.spl override
+	WRITE_ASCII 0x3a c4mkskib
+	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkskib END
+	SAY NAME1 @2009
+	SAY UNIDENTIFIED_DESC @2010
+	
+LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkski2 variable=c4MonkMoreSkillPoint END
 
 //裂空	
-ADD_SECTYPE c4MonkCharge @20090
+// ADD_SECTYPE c4MonkCharge @20090
 
 OUTER_FOR (i=1;i<6;++i) BEGIN	
 	COPY_EXISTING c4mkc0.spl ~override/c4mkc%i%.spl~
 		WRITE_ASCII 0x3a c4mkcatb
 		LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkcatb END
 		LPF ALTER_EFFECT STR_VAR resource=~c4mkc%i%a~ END
-		PATCH_IF i>1 BEGIN
-			i0=i -1
-			LPF CLONE_EFFECT INT_VAR opcode=206 STR_VAR resource=~c4mkc%i0%a~ END
-		END
-		name=2008 + i*2 -1
+		name=2010 + i*2 -1
 		desc=name+1
 		WRITE_LONG 8 RESOLVE_STR_REF ((AT ~%name%~))
 		WRITE_LONG 0x50 RESOLVE_STR_REF ((AT ~%desc%~))
+		PATCH_IF i>1 BEGIN
+			FOR (j=1;j<i;++j) BEGIN
+				LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=321 timing=0 STR_VAR resource=~c4mkc%j%~ END
+			END
+		END
 
-	OUTER_FOR (j=1;j<6;++j) BEGIN
+	OUTER_FOR (j=1;j<5;++j) BEGIN
 		OUTER_PATCH_SAVE charge ~%j%~ BEGIN
 			WRITE_BYTE 0 THIS + 48
 		END
 		
-		LAF CREATE_EFFECT INT_VAR opcode=146 target=2 timing=1 parameter2=1 probability1=9+i*5 STR_VAR name=~c4mkc%i%%charge%~ resource=~c4mkc%i%%charge%~ END
 		LAF CREATE_EFFECT INT_VAR opcode=146 target=2 duration=1 parameter2=1 STR_VAR name=~c4mkc%i%%charge%0~ resource=~c4mkc%i%%charge%0~ END
 		
+		LAF CREATE_EFFECT INT_VAR opcode=146 target=2 timing=1 parameter2=1 probability1=10+i*5 STR_VAR name=~c4mkc%i%%charge%~ resource=~c4mkc%i%%charge%~ END
+		
 		COPY_EXISTING c4mkc00.spl ~override/c4mkc%i%%charge%.spl~
-			WRITE_BYTE 0x27 c4MonkCharge
 			INNER_PATCH_SAVE active_next ~%j%~ BEGIN
 				WRITE_BYTE 0 THIS + 49
 			END
+			LPF ALTER_EFFECT INT_VAR match_opcode=206 STR_VAR resource=~c4mkc%i%a~ END
 			LPF ALTER_EFFECT INT_VAR match_opcode=272 STR_VAR resource=~c4mkc%i%%charge%0~ END
 			LPF ALTER_EFFECT INT_VAR match_opcode=248 STR_VAR resource=~c4mkc%i%%active_next%~ END
-			LPF ALTER_EFFECT INT_VAR match_opcode=206 STR_VAR resource=~c4mkc%i%%charge%~ END
 			FOR (k=1;k<j;++k) BEGIN 
 				INNER_PATCH_SAVE previous ~%k%~ BEGIN
 					WRITE_BYTE 0 THIS + 48
 				END
-				LPF CLONE_EFFECT INT_VAR match_opcode=206 STR_VAR match_resource=~c4mkc%i%%charge%~ resource=~c4mkc%i%%previous%~ insert=first END
-				LPF CLONE_EFFECT INT_VAR match_opcode=206 STR_VAR match_resource=~c4mkc%i%%charge%~ resource=~c4mkc%i%%previous%0~ insert=first END
+				LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=321 timing=0 duration=0 STR_VAR resource=~c4mkc%i%%previous%~ END
 			END
 		
 		COPY_EXISTING c4mkc000.spl ~override/c4mkc%i%%charge%0.spl~
-			WRITE_BYTE 0x27 c4MonkCharge
 			LPF ALTER_EFFECT STR_VAR resource=~c4mkc%charge%~ END
+			FOR (k=1;k<j;++k) BEGIN 
+				INNER_PATCH_SAVE previous ~%k%~ BEGIN
+					WRITE_BYTE 0 THIS + 48
+				END
+				LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=321 timing=0 duration=0 parameter2=0 STR_VAR resource=~c4mkc%i%%previous%0~ END
+			END
 	END
 		
 	COPY_EXISTING ~c4mkc%i%d.spl~ override
-		LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=250 parameter1=25 parameter2=0 END //最大
-		PATCH_IF GAME_IS ~tob bgt~ BEGIN
-			FOR (parameter2=387;parameter2<397;++parameter2) BEGIN
-				PATCH_IF parameter2=389 BEGIN
-					parameter1=i*10
-				END ELSE parameter1=i*5
-				LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=318 parameter1 parameter2 STR_VAR resource=~~ END
-			END
+		//提气
+		LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=250 parameter1=25 parameter2=0 STR_VAR resource=~~ END
+		//伤害
+		LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=332 parameter1=i*10 parameter2=9 STR_VAR resource=~~ END
+		PATCH_FOR_EACH dmgtype IN 1 2 3 4 BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=332 parameter1=i*5 parameter2=dmgtype STR_VAR resource=~~ END
 		END
-		PATCH_IF GAME_IS ~bgee bg2ee eet~ BEGIN
-			FOR (parameter2=1;parameter2<10;++parameter2) BEGIN
-				PATCH_IF parameter2=9 BEGIN
-					parameter1=i*10
-				END ELSE parameter1=i*5
-				LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=332 parameter1 parameter2 STR_VAR resource=~~ END
-			END
-		END
+		//终结技
+		LPF ALTER_EFFECT STR_VAR match_resource=~c4mkc%i%e~ resource=~c4mkc%i%x~ END
 	
-	COPY_EXISTING ~c4mkc%i%e.eff~ override
-		WRITE_SHORT 0x2c 100
-		WRITE_ASCIIE 0x30 ~c4mkc%i%e0~
 		
-	COPY_EXISTING ~c4mkc%i%e0.spl~ override
-		LPF CLONE_EFFECT INT_VAR opcode=221 parameter2=c4MonkCharge STR_VAR resource=~~ END
+	LAF CREATE_EFFECT INT_VAR opcode=146 target=2 duration=1 parameter2=1 STR_VAR name=~c4mkc%i%x~ resource=~c4mkc%i%x~ END
+	
+	COPY_EXISTING c4mkc000.spl ~override/c4mkc%i%x.spl~
+		LPF ALTER_EFFECT STR_VAR resource=~c4mkce~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=321 timing=0 duration=0 parameter2=0 STR_VAR resource=~c4mkc%i%d0~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=321 timing=0 duration=0 parameter2=0 STR_VAR resource=~c4mkc%i%d~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=139 timing=1 parameter1=RESOLVE_STR_REF (@2021) parameter2=0 STR_VAR resource=~c4mkc%i%d~ END
+
 END
+		
+// test
+// COPY_EXISTING_REGEXP GLOB ~c4mk[1-5][a-d].eff~ override
+	// WRITE_SHORT 0x2c 100

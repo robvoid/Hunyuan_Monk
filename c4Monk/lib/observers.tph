@@ -1,41 +1,34 @@
 
 	
 OUTER_SET get_new_sp = RESOLVE_STR_REF (@106)
-LAF create_observer STR_VAR name=c4MonkP conditions=~TriggerOverride(Player%slot%,Global("c4MonkCheck","Locals",1))~ END
+LAF create_observer STR_VAR name=c4MonkP conditions=~Kit(Player%slot%,c4Monk)~ END
 
 OUTER_FOR (n=1;n<7;++n) BEGIN
-	COPY ~.../inlined/blank.baf~ ~%OUTPUT%/c4MonkP%n%.baf~
-		APPEND_FILE_EVALUATE ~%SCRIPTS%/exit_if_not_monk.baf~
+	//角色非混元则清除observer
+	COPY ~%SCRIPTS%/exit_if_not_monk.baf~ ~%OUTPUT%/c4MonkP%n%.baf~
 	
-	// 确保拳法加成不会被CTRL+R或其他类似法术清洗
-	OUTER_FOR (i=1;i<7;++i) BEGIN
-		OUTER_FOR (j=1;j<6;++j) BEGIN
-		
-			OUTER_PATCH_SAVE level ~%j%~ BEGIN
-				WRITE_BYTE 0 THIS+48
-			END
-			OUTER_SPRINT fist_spell ~c4mkf%i%%level%~
-			ACTION_PHP_EACH var_name AS file0 => string BEGIN
-				ACTION_IF ~%fist_spell%~ STRING_CONTAINS_REGEXP ~%file0%~ =0 BEGIN
-					OUTER_SPRINT variable ~%string%~
-				END
-			END
-			
-			COPY ~%OUTPUT%/c4MonkP%n%.baf~ ~%OUTPUT%/c4MonkP%n%.baf~
-				APPEND_FILE_EVALUATE ~%SCRIPTS%/refine_fist.baf~
+	// 防止附魔武器形式的拳头被ctrl+r清除
+	COPY ~%SCRIPTS%/ensure_fist.baf~ ~%OUTPUT%/ensure_fist_P%n%.baf~
+		FOR (level=1;level<51;++level) BEGIN
+			REPLACE_TEXTUALLY ~True()~ ~!HasItem("c4fist%level%",Player%n%)
+			True()~
 		END
-	END
-	
+		REPLACE_TEXTUALLY ~True()~ ~~
 	COPY ~%OUTPUT%/c4MonkP%n%.baf~ ~%OUTPUT%/c4MonkP%n%.baf~
-		// 防止附魔武器形式的拳头被ctrl+r清除
-		APPEND_FILE_EVALUATE ~%SCRIPTS%/ensure_fist.baf~
-		// 技能点及学习对话
+		APPEND_FILE_EVALUATE ~%OUTPUT%/ensure_fist_P%n%.baf~
+		
+	// 防止凌波微步添加的头盔被移除
+	COPY ~%OUTPUT%/c4MonkP%n%.baf~ ~%OUTPUT%/c4MonkP%n%.baf~
+		APPEND_FILE_EVALUATE ~%SCRIPTS%/ensure_helm.baf~
+		
+	// 技能点和触发对话
+	COPY ~%OUTPUT%/c4MonkP%n%.baf~ ~%OUTPUT%/c4MonkP%n%.baf~
 		APPEND_FILE_EVALUATE ~%SCRIPTS%/start_dialog.baf~
 		APPEND_FILE_EVALUATE ~%SCRIPTS%/more_skill_point.baf~
 		FOR (level=2;level<51;level+=2) BEGIN
 			APPEND_FILE_EVALUATE ~%SCRIPTS%/add_skill_point.baf~
 		END
 		
-	//编译脚本
+	//编译
 	COMPILE EVAL ~%OUTPUT%/c4MonkP%n%.baf~
 END

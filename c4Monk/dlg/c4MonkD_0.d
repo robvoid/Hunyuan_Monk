@@ -158,8 +158,8 @@ IF ~~ THEN BEGIN refinefist
 	++ @1200 + fist2
 	++ @1300 + fist3
 	++ @1400 + fist4
-	++ @1500 + fist5
-	++ @1600 + fist6
+	// ++ @1500 + fist5
+	// ++ @1600 + fist6
 	++ @104 + gotskillpoint
 END
 
@@ -207,6 +207,7 @@ IF ~~ THEN BEGIN fist4
 	++ @104 + gotskillpoint
 END
 
+/* 
 IF ~~ THEN BEGIN fist5
 	SAY @1501
 	+ ~Global("c4MonkPiercingFist","Locals",0)~ + @1511 DO ~SetGlobal("c4MonkPiercingFist","Locals",1) ReallyForceSpellRES("c4mkf5a",Myself)~ + done
@@ -228,4 +229,4 @@ IF ~~ THEN BEGIN fist6
 	+ ~Global("c4MonkSlashingFist","Locals",5)~ + @1602 + refinefist
 	++ @104 + gotskillpoint
 END	
-	
+*/

@@ -1,8 +1,7 @@
 
 IF
-	Class(Player%n%,MONK)
-	TriggerOverride(Player%n%,Global("c4MonkCheck","Locals",1))
-	!CheckStat(Player%n%,8,111)
+	Kit(Player%n%,c4Monk)
+	True()
 THEN
 	RESPONSE #100
 		ActionOverride(Player%n%, ReallyForceSpellRES("c4mkfist",Myself)

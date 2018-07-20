@@ -1,6 +1,6 @@
 
 IF
-	!TriggerOverride(Player%n%,Global("c4MonkCheck","Locals",1))
+	!Kit(Player%n%,c4Monk)
 THEN
 	RESPONSE #100
 		DestroySelf()

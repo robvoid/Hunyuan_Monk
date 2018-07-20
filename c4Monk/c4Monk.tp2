@@ -1,7 +1,7 @@
 BACKUP ~c4monk/backup~
 AUTHOR ~c4demon@gmail.com~
 
-VERSION ~v3.1~
+VERSION ~v040~
 AUTO_EVAL_STRINGS
 
 README ~c4monk/Languages/%LANGUAGE%/readme.txt~
@@ -26,18 +26,14 @@ LANGUAGE
   
 BEGIN @-101
 DESIGNATED 1
-REQUIRE_PREDICATE GAME_IS ~tob bgt bgee bg2ee eet~ @-0
+REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @-0
 
-// include ToBEx
-ACTION_IF GAME_IS ~tob bgt~ BEGIN
-	LOAD_TRA "%MOD_FOLDER%/TobEx_redist/TobEx.tra"
-	ACTION_INCLUDE "%MOD_FOLDER%/TobEx_redist/TobEx.tpa"
-END
+COPY_EXISTING ring01.itm ~data/c4monk_v%c4MonkVer%.mrk~
   
 // copys
 COPY ~%MOD_FOLDER%/bam~ ~override~
 COPY ~%MOD_FOLDER%/vvc~ ~override~
-COPY ~%MOD_FOLDER%/itm~ ~override~
+
 COPY ~%MOD_FOLDER%/spl~ ~override~
 	LPF ALTER_EFFECT INT_VAR power=0 resist_dispel=2 END
 
@@ -49,14 +45,19 @@ LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkchek
 LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=c4MonkVer STR_VAR name=c4mkver variable=c4MonkVersion END
 
 // version check
-INCLUDE ~%LIBS%/version_check.tph~
+// OUTER_SPRINT VERSION_CHECK ~%LIBS%/version_check~
+// INCLUDE ~%LIBS%/version_check.tph~
 
-// Soul Out
+// ÔªÉñ³öÇÏ
 COPY_EXISTING c4mkimmu.spl override
 	WRITE_ASCII 0x3a c4mkimmu
-	LPF ALTER_SPELL_HEADER INT_VAR speed=1 STR_VAR icon=c4mkimmu END
+	LPF ALTER_SPELL_HEADER INT_VAR speed=0 STR_VAR icon=c4mkimmu END
 	LPF ALTER_EFFECT INT_VAR match_timing=0 duration=12 END
 	SAY NAME1 @108
+	SAY UNIDENTIFIED_DESC @109
+	
+// define kit
+INCLUDE ~%LIBS%/addkit.tph~
 
 // fists
 INCLUDE ~%LIBS%/create_fists.tph~
@@ -72,9 +73,6 @@ INCLUDE ~%LIBS%/observers.tph~
 
 // HLAs
 INCLUDE ~%LIBS%/HLAs.tph~
-	
-// define kit
-INCLUDE ~%LIBS%/addkit.tph~
 
 BEGIN @-102
 DESIGNATED 2
@@ -101,11 +99,8 @@ COPY_EXISTING_REGEXP GLOB ~.*\.itm~ override
 				END
 			END
 		END
-		PATCH_IF GAME_IS ~tob bgt~ BEGIN
-			LPF CLONE_EFFECT INT_VAR silent=1 match_opcode opcode=177 parameter1=20 parameter2=5 STR_VAR resource=~%eff_file%~ END
-		END ELSE BEGIN
-			kit_ids = IDS_OF_SYMBOL (kit c4Monk) 
-			LPF CLONE_EFFECT INT_VAR silent=1 match_opcode opcode=177 parameter1=kit_ids parameter2=9 STR_VAR resource=~%eff_file%~ END
-		END
+		kit_ids = IDS_OF_SYMBOL (kit c4Monk) 
+		LPF DELETE_EFFECT INT_VAR silent=1 match_opcode=177 STR_VAR match_resource=~%eff_file%~ END
+		LPF CLONE_EFFECT INT_VAR silent=1 match_opcode opcode=177 parameter1=kit_ids parameter2=9 STR_VAR resource=~%eff_file%~ END
 	END
 BUT_ONLY
