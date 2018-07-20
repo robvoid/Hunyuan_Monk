@@ -1,9 +1,0 @@
-
-IF
-	Kit(Player%n%,c4Monk)
-	True()
-THEN
-	RESPONSE #100
-		ActionOverride(Player%n%, ReallyForceSpellRES("c4mkfist",Myself)
-		Continue()
-END
