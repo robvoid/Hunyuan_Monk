@@ -1,0 +1,7 @@
+
+IF
+	!Kit(Player%n%,c4Monk)
+THEN
+	RESPONSE #100
+		DestroySelf()
+END
