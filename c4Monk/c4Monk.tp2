@@ -11,10 +11,10 @@ ALWAYS
 	
   INCLUDE ~%MOD_FOLDER%/lib/_always.tph~
 	
-	ACTION_DEFINE_ARRAY utf8convert BEGIN END
-	ACTION_DEFINE_ARRAY utf8noconvert BEGIN ~title~ END
-	ACTION_DEFINE_ARRAY utf8reload BEGIN ~game~ END
-	LAF C4_HANDLE_CHARSETS STR_VAR lang_path=Languages END
+    ACTION_DEFINE_ARRAY convert_array BEGIN END
+    ACTION_DEFINE_ARRAY noconvert_array BEGIN ~title~ END
+    ACTION_DEFINE_ARRAY reload_array BEGIN ~game~ END
+    LAF C4_HANDLE_CHARSETS STR_VAR lang_path=Languages noconvert_array reload_array END
 	
 END
 

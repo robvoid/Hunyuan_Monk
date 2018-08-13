@@ -99,6 +99,11 @@ END
 
 
 /* **************************************** */
+DEFINE_ACTION_FUNCTION CREATE_EMPTY_SPELL STR_VAR	name=~c4tmpspl~ BEGIN
+	LAF CREATE_SPELL STR_VAR spell=~%name%~ END
+	COPY_EXISTING ~%name%.spl~ override
+		LPF ADD_SPELL_HEADER END
+END
 
 DEFINE_PATCH_FUNCTION ~ADD_SPELL_HEADER~
   INT_VAR
@@ -183,6 +188,8 @@ DEFINE_ACTION_FUNCTION CREATE_EFFECT
 		parameter2=0
 		parameter3=0
     parameter4=0
+    parameter5=0
+    parameter6=0
 		probability1=100
 		probability2=0
 		power=0
@@ -194,8 +201,8 @@ DEFINE_ACTION_FUNCTION CREATE_EFFECT
 		savingthrow=0
 	STR_VAR
 		resource=~~
-		vvc=~~
 		resource2=~~
+		resource3=~~
 		variable=~~
 		name=~~
 BEGIN
@@ -217,16 +224,25 @@ BEGIN
 		WRITE_LONG 0x5c resist_dispel
 		WRITE_LONG 0x60 parameter3
 		WRITE_LONG 0x64 parameter4
+		WRITE_LONG 0x68 parameter5
+		WRITE_LONG 0x6c parameter6
 		WRITE_ASCIIE 0x30 ~%resource%~
-		WRITE_ASCIIE 0x68 ~%vvc%~
 		WRITE_ASCIIE 0x70 ~%resource2%~
+		WRITE_ASCIIE 0x78 ~%resource3%~
 		WRITE_ASCIIE 0xa8 ~%variable%~
 END
 
 
 /* **************************************** */
-		
-DEFINE_ACTION_FUNCTION C4_HANDLE_CHARSETS STR_VAR lang_path=~~ BEGIN	
+	
+DEFINE_ACTION_FUNCTION C4_HANDLE_CHARSETS 
+	STR_VAR
+		lang_path=~~
+		convert_array=~~
+		noconvert_array=~~
+		reload_array=~~
+BEGIN
+
 	ACTION_DEFINE_ASSOCIATIVE_ARRAY character_set BEGIN
 		schinese => CP936
 		tschinese => CP950
@@ -249,10 +265,10 @@ DEFINE_ACTION_FUNCTION C4_HANDLE_CHARSETS STR_VAR lang_path=~~ BEGIN
 		korean => CP949
 	END
 	
-	ACTION_IF GAME_IS ~bgee bg2ee eet~ THEN BEGIN
+	ACTION_IF GAME_IS ~bgee bg2ee eet iwdee~ THEN BEGIN
+		MKDIR ~%MOD_FOLDER%/%lang_path%/ee/%LANGUAGE%~
+		COPY ~%MOD_FOLDER%/%lang_path%/%LANGUAGE%~ ~%MOD_FOLDER%/%lang_path%/ee/%LANGUAGE%~
 		ACTION_IF ~%WEIDU_OS%~ STR_EQ ~WIN32~ THEN BEGIN
-			MKDIR ~%MOD_FOLDER%/%lang_path%/ee/%LANGUAGE%~
-			COPY ~%MOD_FOLDER%/%lang_path%/%LANGUAGE%~ ~%MOD_FOLDER%/%lang_path%/ee/%LANGUAGE%~
 			LAF HANDLE_CHARSETS 
 				INT_VAR
 					infer_charset = 1
@@ -260,9 +276,9 @@ DEFINE_ACTION_FUNCTION C4_HANDLE_CHARSETS STR_VAR lang_path=~~ BEGIN
 					tra_path = EVAL ~%MOD_FOLDER%/%lang_path%/ee~
 					iconv_path = EVAL ~%MOD_FOLDER%/%lang_path%/iconv~
 					charset_table=character_set
-					convert_array=utf8convert
-					noconvert_array=utf8noconvert
-					reload_array=utf8reload
+					convert_array
+					noconvert_array
+					reload_array
 			END
 		END ELSE BEGIN
 			LAF HANDLE_CHARSETS 
@@ -271,9 +287,9 @@ DEFINE_ACTION_FUNCTION C4_HANDLE_CHARSETS STR_VAR lang_path=~~ BEGIN
 				STR_VAR
 					tra_path = EVAL ~%MOD_FOLDER%/%lang_path%/ee~
 					charset_table=character_set
-					convert_array=utf8convert
-					noconvert_array=utf8noconvert
-					reload_array=utf8reload
+					convert_array
+					noconvert_array
+					reload_array
 			END
 		END
 	END	
@@ -391,17 +407,12 @@ DEFINE_PATCH_FUNCTION CREATE_HEADERS_AS_LEVEL
 		level_multiplier = 1 
 BEGIN
 	
-  // READ_SHORT	0x68	header_count
+	max_level = (max_level>1 && max_level<=50) ? max_level : 50
+	level_increment = (level_increment>1 && level_increment<=max_level) ? level_increment : 2
+	level_multiplier = (level_multiplier>0 && level_multiplier<max_level) ? level_multiplier : 1
 	
-  PATCH_IF 
-				(max_level > 1)
-		&&	(level_increment > 0)
-		&&	(level_multiplier > 0)
-		// &&	(header_count = 1) 
-	BEGIN
-		FOR (required_level=level_increment; required_level<=max_level; required_level+=level_multiplier) BEGIN
-			LPF CLONE_SPELL_HEADER INT_VAR required_level END
-		END
+	FOR (min=level_increment; min<=max_level; min+=level_multiplier) BEGIN
+		LPF CLONE_SPELL_HEADER INT_VAR required_level=min END
 	END
 
 END
@@ -718,14 +729,24 @@ END
 		
 // DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ BEGIN
 DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ conditions=~~ BEGIN
-<<<<<<<< .../inlined/create_observer_baldur1.baf
+<<<<<<<< .../inlined/create_observer_baldur.baf
 IF
 	InPartyAllowDead(Player%slot%)
 	%conditions%
-	!Exists("%name%%slot%")
+	// !Exists("%name%%slot%")
+	!GlobalTimerNotExpired("%name%%slot%_Exists_Timer","Global")
 THEN
 	RESPONSE #100
 		CreateCreatureImpassable("%name%%slot%",[1.1],0)
+		Continue()
+END
+>>>>>>>>
+<<<<<<<< .../inlined/observer.baf
+IF
+	True()
+THEN
+	RESPONSE #100
+		SetGlobalTimer("%name%%slot%_Exists_Timer","Global",3)
 		Continue()
 END
 >>>>>>>>
@@ -747,14 +768,15 @@ END
 				WRITE_ASCIIE 0x248 ~%name%%slot%~ #40
 				WRITE_ASCIIE 0x280 ~%name%%slot%~ #32
 			COPY_EXISTING blank.bcs ~override/c4obtemp.bcs~
-			EXTEND_BOTTOM ~c4obtemp.bcs~ ~.../inlined/create_observer_baldur1.baf~ EVAL EVAL
+			EXTEND_BOTTOM ~c4obtemp.bcs~ ~.../inlined/create_observer_baldur.baf~ EVAL EVAL
 			COPY_EXISTING_REGEXP GLOB ~baldur.*\.bcs~ override
 				R_B_B ~override/c4obtemp.bcs~ ~override/blank.bcs~ ON_MISMATCH END
 			BUT_ONLY
-			EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~.../inlined/create_observer_baldur1.baf~ EVAL EVAL
+			EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~.../inlined/create_observer_baldur.baf~ EVAL EVAL
 			MOVE ~override/c4obtemp.bcs~ ~%MOD_FOLDER%/backup/%name%%slot%_baldur.bcs~
 			
 			COPY_EXISTING blank.bcs ~override/%name%%slot%.bcs~
+			EXTEND_BOTTOM ~override/%name%%slot%.bcs~ ~.../inlined/observer.baf~ EVAL
 		END
 	END ELSE BEGIN
 		PRINT ~Wrong creature name specified !!~
@@ -860,4 +882,48 @@ DEFINE_PATCH_FUNCTION item_flag RET valid moveable magical two_hand BEGIN
 			END
 		END
 	END
+END
+
+
+/* **************************************** */
+DEFINE_ACTION_FUNCTION cd_new_portrait_icon
+  INT_VAR string = 0
+  STR_VAR bam_file = "****"
+  RET     icon
+  BEGIN
+
+  COPY_EXISTING ~statdesc.2da~ ~override~
+    COUNT_2DA_ROWS 3 count
+    READ_2DA_ENTRY (count - 1) 0 3 icon
+    SET icon += 1
+
+  APPEND ~statdesc.2da~ ~%icon% %string% %bam_file%~
+
+END
+
+DEFINE_ACTION_FUNCTION	ADD_SPLPROT	INT_VAR	stat = 0	value = 0	relation = 0	RET	new_row		BEGIN
+	ACTION_IF	(stat > 278)	BEGIN	WARN	~SPLPROT.2DA - Stat out of Bounds.~	END
+	ACTION_IF	((stat != 259) AND (stat != 260) AND (relation > 11))	BEGIN	WARN	~SPLPROT.2DA - Relation out of Bounds.~	END
+	COPY_EXISTING ~SPLPROT.2DA~	~override~
+		COUNT_2DA_COLS	cols
+		COUNT_2DA_ROWS cols rows
+		TEXT_SPRINT check_row ~~
+		TEXT_SPRINT check_stat ~~
+		SET new_row = 0
+		FOR(current_row = 0; current_row < rows; ++current_row)	BEGIN	READ_2DA_ENTRY current_row 1 cols check_stat
+			PATCH_IF (~%check_stat%~ STRING_EQUAL ~%stat%~)	BEGIN	READ_2DA_ENTRY current_row 2 cols check_value
+				PATCH_IF (~%check_value%~ STRING_EQUAL ~%value%~)	BEGIN	READ_2DA_ENTRY current_row 3 cols check_relation
+					PATCH_IF (~%check_relation%~ STRING_EQUAL ~%relation%~)	BEGIN	new_row = current_row	current_row = rows	END
+				END
+			END
+		END
+		PATCH_IF (new_row = 0)	BEGIN
+			FOR(current_row = 0; current_row < rows; ++current_row)	BEGIN	READ_2DA_ENTRY current_row 1 cols check_stat
+				// PATCH_IF (~%check_stat%~ STRING_EQUAL ~*~)	BEGIN	new_row = current_row	current_row = rows	END //不检查空行直接添加
+			END
+			PATCH_IF (new_row = 0)	BEGIN	new_row = rows	INSERT_2DA_ROW rows cols ~%new_row%		   %stat%		   %value%		   %relation%~
+			END	ELSE	BEGIN	SET_2DA_ENTRY new_row 1 cols ~%stat%~	SET_2DA_ENTRY new_row 2 cols ~%value%~	SET_2DA_ENTRY new_row 3 cols ~%relation%~	END
+		END
+		PRETTY_PRINT_2DA
+	BUT_ONLY
 END
