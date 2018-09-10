@@ -64,7 +64,7 @@ A monk kit for both vanilla BG2:ToB/BGT and BG(2)EE/BGT.
 
 
 
-更新历史
+## 更新历史
 v4.1 2018.09.10
 * 更新fl#add_kit_ee
 * 修正凌波微步的AC加成无效的错误
