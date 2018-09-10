@@ -1,42 +1,42 @@
 @echo off
 setlocal
 
-:: /* ±¾³ÌĞòÓÉ c4_angel AKA ËÄÊÇ¶ø·Ç ĞŞ¸Ä×Ô ModPackaging: https://github.com/Gibberlings3/ModPackaging £¬¸ĞĞ»Ô­×÷Õß */
+:: /* æœ¬ç¨‹åºç”± c4_angel AKA å››æ˜¯è€Œé ä¿®æ”¹è‡ª ModPackaging: https://github.com/Gibberlings3/ModPackaging ï¼Œæ„Ÿè°¢åŸä½œè€… */
 
-:: /* ³õÊ¼»¯ÓÎÏ·»·¾³¶ÔÓ¦µÄÃû³Æ£¬²»¿ÉĞŞ¸Ä */
+:: /* åˆå§‹åŒ–æ¸¸æˆç¯å¢ƒå¯¹åº”çš„åç§°ï¼Œä¸å¯ä¿®æ”¹ */
 call "%~dp0..\ModPackaging\utilities\ie_games.bat"
 
-:: /* ĞŞ¸ÄÒ»ÏÂ4¸ö±äÁ¿£¬Ö¸¶¨ModµÄÃû×Ö¡¢°æ±¾¡¢×÷ÕßÃû×ÖºÍModÄ¿Â¼Ãû£¬Ç°3Ïî½«³öÏÖÔÚWindowsµÄ°²×°³ÌĞò½çÃæ£¬ÇëÎğÊ¹ÓÃÖĞÎÄ */
+:: /* ä¿®æ”¹ä¸€ä¸‹4ä¸ªå˜é‡ï¼ŒæŒ‡å®šModçš„åå­—ã€ç‰ˆæœ¬ã€ä½œè€…åå­—å’ŒModç›®å½•åï¼Œå‰3é¡¹å°†å‡ºç°åœ¨Windowsçš„å®‰è£…ç¨‹åºç•Œé¢ï¼Œè¯·å‹¿ä½¿ç”¨ä¸­æ–‡ */
 set "mod_name=Hunyuan Monk"
-set mod_version=040
+set mod_version=4.1
 set mod_author=c4_angel
 set mod_folder=c4Monk
 
-:: /* ´ÓÒÔÏÂÏîÄ¿ÖĞÑ¡ÔñModËù¼æÈİµÄÓÎÏ·»·¾³²¢ĞŞ¸Ä£º*/
+:: /* ä»ä»¥ä¸‹é¡¹ç›®ä¸­é€‰æ‹©Modæ‰€å…¼å®¹çš„æ¸¸æˆç¯å¢ƒå¹¶ä¿®æ”¹ï¼š*/
 :: /* %bg1%, %bg2%, %bgt%, %tutu%, %bgee%, %bgiiee%, %iwd1%, %iwdee%, %iwd2%, %iwd2ee%, %iwd-in-bg2%, %pst%, %pstee%, %eet% */
 set "compatible_games=%bgee%, %bgiiee%, %eet%, %iwdee%"
 
-:: /* ĞŞ¸ÄÒÔÏÂ5¸ö±äÁ¿Æ¥ÅäÄãµÄMod£º */
-:: /* ico_folder£ºÖ¸¶¨°²×°³ÌĞòÊ¹ÓÃµÄÍ¼±êºÍÎÄ±¾´æ·ÅÎ»ÖÃ */
-:: /* audio_folder£ºsoxºÍoggdec.exeËùÔÚÄ¿Â¼£¬Èç¹ûMod²»Ìí¼ÓÈÎºÎÒôÆµÔòÎŞĞèĞŞ¸Ä */
-:: /* tispack_folder£º°üº¬Win32¡¢OSXºÍUnixÓÃÓÚ´¦ÀítilesetsµÄ×ÓÄ¿Â¼£¬ÈçMod²»Ìí¼ÓÈÎºÎtilesetsÔòÎŞĞèĞŞ¸Ä */
-:: /* iconv_folder£ºiconv.exeµÄ´æ·ÅÄ¿Â¼£¬ÈçMod²»Ö§³ÖEE»ò²»°üº¬HANDLE_CHARSETS¶ÔÎÄ±¾½øĞĞ×ªÂëÔòÎŞĞèĞŞ¸Ä */
-:: /* mod_readme£ºModËµÃ÷ÎÄµµµÄÔÚÏßµØÖ·£¬¿ÉÒÔÊÇÈÎÒâÍøÒ³»òÌû×ÓµÈµÈ£¬Ä¬ÈÏÎªTROW²©µÂÖ®ÃÅ×¨Çø¿ËÂ×Íş¶ûÖ®¼Ò×Ó°æ¿é */
+:: /* ä¿®æ”¹ä»¥ä¸‹5ä¸ªå˜é‡åŒ¹é…ä½ çš„Modï¼š */
+:: /* ico_folderï¼šæŒ‡å®šå®‰è£…ç¨‹åºä½¿ç”¨çš„å›¾æ ‡å’Œæ–‡æœ¬å­˜æ”¾ä½ç½® */
+:: /* audio_folderï¼šsoxå’Œoggdec.exeæ‰€åœ¨ç›®å½•ï¼Œå¦‚æœModä¸æ·»åŠ ä»»ä½•éŸ³é¢‘åˆ™æ— éœ€ä¿®æ”¹ */
+:: /* tispack_folderï¼šåŒ…å«Win32ã€OSXå’ŒUnixç”¨äºå¤„ç†tilesetsçš„å­ç›®å½•ï¼Œå¦‚Modä¸æ·»åŠ ä»»ä½•tilesetsåˆ™æ— éœ€ä¿®æ”¹ */
+:: /* iconv_folderï¼šiconv.exeçš„å­˜æ”¾ç›®å½•ï¼Œå¦‚Modä¸æ”¯æŒEEæˆ–ä¸åŒ…å«HANDLE_CHARSETSå¯¹æ–‡æœ¬è¿›è¡Œè½¬ç åˆ™æ— éœ€ä¿®æ”¹ */
+:: /* mod_readmeï¼šModè¯´æ˜æ–‡æ¡£çš„åœ¨çº¿åœ°å€ï¼Œå¯ä»¥æ˜¯ä»»æ„ç½‘é¡µæˆ–å¸–å­ç­‰ç­‰ï¼Œé»˜è®¤ä¸ºTROWåšå¾·ä¹‹é—¨ä¸“åŒºå…‹ä¼¦å¨å°”ä¹‹å®¶å­ç‰ˆå— */
 set ico_folder=%mod_folder%\style
 set audio_folder=%mod_folder%\audio
 set tispack_folder=%mod_folder%\tiz
 set iconv_folder=%mod_folder%\languages\iconv
 set mod_readme=https://trow.cc/board/showforum=49
 
-:: /* ÉèÖÃÎª²»Í¬ÏµÍ³´ò°ü°²×°ÎÄ¼ş£¬ÉèÎª0±íÊ¾²»´ò°ü */
+:: /* è®¾ç½®ä¸ºä¸åŒç³»ç»Ÿæ‰“åŒ…å®‰è£…æ–‡ä»¶ï¼Œè®¾ä¸º0è¡¨ç¤ºä¸æ‰“åŒ… */
 set build_windows=1
 set build_osx=1
 set build_linux=1
 
-:: /* ÉèÖÃÊÇ·ñ½«ModÄÚÎÄ¼şÃûĞ¡Ğ´´¦Àí£¬ÆôÓÃ=1£¬²»ÆôÓÃ=0 */
+:: /* è®¾ç½®æ˜¯å¦å°†Modå†…æ–‡ä»¶åå°å†™å¤„ç†ï¼Œå¯ç”¨=1ï¼Œä¸å¯ç”¨=0 */
 set lowercase_filenames=1
 
-:: /* ÕæÊµ´ò°ü³ÌĞò */
+:: /* çœŸå®æ‰“åŒ…ç¨‹åº */
 call "%~dp0..\ModPackaging\utilities\complete_packaging.bat"
 
 endlocal
