@@ -1,7 +1,7 @@
 BACKUP ~c4monk/backup~
 AUTHOR ~c4demon@gmail.com~
 
-VERSION ~v040~
+VERSION ~v4.1~
 AUTO_EVAL_STRINGS
 
 README ~c4monk/Languages/%LANGUAGE%/readme.txt~

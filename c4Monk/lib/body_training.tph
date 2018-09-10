@@ -2,6 +2,11 @@
 ////身法
 LAF skill_creation STR_VAR spellname=c4mkbd END
 
+//小图标
+LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF ((AT 211)) STR_VAR bam_file=c4mkbd1d RET c4mkbd1d=icon END
+LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF ((AT 221)) STR_VAR bam_file=c4mkbd2d RET c4mkbd2d=icon END
+LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF ((AT 231)) STR_VAR bam_file=c4mkbd3d RET c4mkbd3d=icon END
+
 OUTER_FOR (i=1;i<6;++i) BEGIN
 	OUTER_PATCH_SAVE level ~%i%~ BEGIN
 		WRITE_BYTE 0 THIS+48
@@ -30,7 +35,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		PATCH_FOR_EACH match_opcode IN 86 87 88 89 BEGIN
 			LPF ALTER_EFFECT INT_VAR match_opcode duration=30+30*i parameter1=10*i END
 		END
-		LPF ALTER_EFFECT INT_VAR match_opcode=142 duration=30+30*i END
+		LPF ALTER_EFFECT INT_VAR match_opcode=142 duration=30+30*i parameter2=c4mkbd1d END
 		FOR (bd=1;bd<4;++bd) BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd%bd%%level%~ END
 		END
@@ -43,7 +48,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		PATCH_FOR_EACH match_opcode IN 27 28 29 30 31 84 85 BEGIN
 			LPF ALTER_EFFECT INT_VAR match_opcode duration=30+30*i parameter1=15*i END
 		END
-		LPF ALTER_EFFECT INT_VAR match_opcode=142 duration=30+30*i END
+		LPF ALTER_EFFECT INT_VAR match_opcode=142 duration=30+30*i parameter2=c4mkbd2d END
 		FOR (bd=1;bd<4;++bd) BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd%bd%%level%~ END
 		END
@@ -55,6 +60,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD3 END
 		SAY NAME1 @231
 		LPF ALTER_EFFECT INT_VAR match_timing=0 duration=30+30*i END
+		LPF ALTER_EFFECT INT_VAR match_opcode=142 duration=30+30*i parameter2=c4mkbd3d END
 		LPF ALTER_EFFECT INT_VAR match_opcode=146 STR_VAR resource=~c4mkbd3%i%~ END
 		total_effect=(30+30*i) / 6
 		FOR (j=1;j<total_effect;++j) BEGIN
