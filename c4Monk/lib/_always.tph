@@ -1,12 +1,12 @@
 	
 // MKDIR ~%MOD_FOLDER%/output~
-OUTER_SPRINT OUTPUT ~%MOD_FOLDER%/output~
+OUTER_SPRINT OUTPUT ~%MOD_FOLDER%/backup/output~
 OUTER_SPRINT SCRIPTS ~%MOD_FOLDER%/baf~
 OUTER_SPRINT LIBS ~%MOD_FOLDER%/lib~
 
 INCLUDE ~%LIBS%/_functions.tpa~
 
-OUTER_SET c4MonkVer=410
+OUTER_SET c4MonkVer=411
 // OUTER_SPRINT conditions ~TriggerOverride(Player%slot%,Global("c4MonkCheck","Locals",1))~
 	
 ACTION_IF GAME_IS ~BGEE BG2EE EET~ BEGIN

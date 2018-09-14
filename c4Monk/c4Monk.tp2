@@ -1,32 +1,27 @@
 BACKUP ~c4monk/backup~
 AUTHOR ~c4demon@gmail.com~
 
-VERSION ~v4.1~
+VERSION ~v4.1.1~
 AUTO_EVAL_STRINGS
 
-README ~c4monk/Languages/%LANGUAGE%/readme.txt~
-AUTO_TRA ~c4monk/Languages/%s~
+README ~c4monk/languages/%LANGUAGE%/readme.txt~
+AUTO_TRA ~c4monk/languages/%s~
 
 ALWAYS
 	
   INCLUDE ~%MOD_FOLDER%/lib/_always.tph~
 	
-    ACTION_DEFINE_ARRAY convert_array BEGIN END
-    ACTION_DEFINE_ARRAY noconvert_array BEGIN ~title~ END
-    ACTION_DEFINE_ARRAY reload_array BEGIN ~game~ END
-    LAF C4_HANDLE_CHARSETS STR_VAR lang_path=Languages noconvert_array reload_array END
-	
 END
 
 LANGUAGE
-  ~Simplified Chinese~ 	~schinese~
-												~%MOD_FOLDER%/Languages/schinese/prompts-%WEIDU_OS%.tra~
-												~%MOD_FOLDER%/Languages/schinese/title.tra~
-												~%MOD_FOLDER%/Languages/schinese/game.tra~
+  ~¼òÌåÖÐÎÄ~ 	~schinese~
+							~%MOD_FOLDER%/languages/schinese/prompts/prompts-%WEIDU_OS%.tra~
+							~%MOD_FOLDER%/languages/schinese/setup.tra~
+							~%MOD_FOLDER%/languages/schinese/game.tra~
   
 BEGIN @-101
 DESIGNATED 1
-REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @-0
+REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @-10000
 
 COPY_EXISTING ring01.itm ~data/c4monk_v%c4MonkVer%.mrk~
   
