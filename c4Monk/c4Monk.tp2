@@ -1,10 +1,10 @@
 BACKUP ~c4monk/backup~
 AUTHOR ~c4demon@gmail.com~
 
-VERSION ~v4.1.1~
+VERSION ~v4.2~
 AUTO_EVAL_STRINGS
 
-README ~c4monk/languages/%LANGUAGE%/readme.txt~
+README ~c4monk/languages/%LANGUAGE%/readme.pdf~
 AUTO_TRA ~c4monk/languages/%s~
 
 ALWAYS
