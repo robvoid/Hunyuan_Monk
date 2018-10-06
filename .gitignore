@@ -4,7 +4,6 @@
 /*.tar.gz
 /*.exe
 backup/
-Backup/
 
 # Readme word file
 *.docx
