@@ -35,13 +35,11 @@ COPY_EXISTING c4mkski2.spl override
 	SAY NAME1 @2009
 	SAY UNIDENTIFIED_DESC @2010
 	
-LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkski2 variable=c4MonkMoreSkillPoint END
+LAF CREATE_EFFECT INT_VAR opcode=309 timing=1 parameter1=1 parameter2=1 STR_VAR name=c4mkski2 resource=~c4MonkSk~ resource2=~illPoint~ END
 
 //ая©у	
-// ADD_SECTYPE c4MonkCharge @20090
-
 OUTER_FOR (i=1;i<6;++i) BEGIN	
-	COPY_EXISTING c4mkc0.spl ~override/c4mkc%i%.spl~
+	COPY ~%mod_root%/spl/base/c4mkc0.spl~ ~override/c4mkc%i%.spl~
 		WRITE_ASCII 0x3a c4mkcatb
 		LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkcatb END
 		LPF ALTER_EFFECT STR_VAR resource=~c4mkc%i%a~ END
@@ -64,7 +62,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		
 		LAF CREATE_EFFECT INT_VAR opcode=146 target=2 timing=1 parameter2=1 probability1=10+i*5 STR_VAR name=~c4mkc%i%%charge%~ resource=~c4mkc%i%%charge%~ END
 		
-		COPY_EXISTING c4mkc00.spl ~override/c4mkc%i%%charge%.spl~
+		COPY ~%mod_root%/spl/base/c4mkc00.spl~ ~override/c4mkc%i%%charge%.spl~
 			INNER_PATCH_SAVE active_next ~%j%~ BEGIN
 				WRITE_BYTE 0 THIS + 49
 			END
@@ -78,7 +76,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 				LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=321 timing=0 duration=0 STR_VAR resource=~c4mkc%i%%previous%~ END
 			END
 		
-		COPY_EXISTING c4mkc000.spl ~override/c4mkc%i%%charge%0.spl~
+		COPY ~%mod_root%/spl/base/c4mkc000.spl~ ~override/c4mkc%i%%charge%0.spl~
 			LPF ALTER_EFFECT STR_VAR resource=~c4mkc%charge%~ END
 			FOR (k=1;k<j;++k) BEGIN 
 				INNER_PATCH_SAVE previous ~%k%~ BEGIN
@@ -102,7 +100,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		
 	LAF CREATE_EFFECT INT_VAR opcode=146 target=2 duration=1 parameter2=1 STR_VAR name=~c4mkc%i%x~ resource=~c4mkc%i%x~ END
 	
-	COPY_EXISTING c4mkc000.spl ~override/c4mkc%i%x.spl~
+	COPY ~%mod_root%/spl/base/c4mkc000.spl~ ~override/c4mkc%i%x.spl~
 		LPF ALTER_EFFECT STR_VAR resource=~c4mkce~ END
 		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=321 timing=0 duration=0 parameter2=0 STR_VAR resource=~c4mkc%i%d0~ END
 		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=321 timing=0 duration=0 parameter2=0 STR_VAR resource=~c4mkc%i%d~ END

@@ -1,9 +1,10 @@
 
 IF
-	Kit(Player%n%,c4Monk)
-	True()
+	Kit(Player%PN%,c4Monk)
+	Level(Player%PN%,%level%)
+	!HasItem("c4mkbf%level%",Player%PN%)
 THEN
 	RESPONSE #100
-		ActionOverride(Player%n%, ReallyForceSpellRES("c4mkfist",Myself)
-		Continue()
+		ReallyForceSpellRES("c4mkbf%level%",Player%PN%)
+		// Continue()
 END

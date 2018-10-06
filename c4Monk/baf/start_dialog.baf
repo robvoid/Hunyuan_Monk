@@ -1,17 +1,17 @@
 
 IF
-	Kit(Player%n%,c4Monk)
-	TriggerOverride(Player%n%,Global("c4MonkDialog","Locals",1))
+	Kit(Player%PN%,c4Monk)
+	TriggerOverride(Player%PN%,Global("c4MonkDialog","Locals",1))
 THEN
 	RESPONSE #100
-		ActionOverride(Player%n%,StartDialogOverride("c4monkd",Myself))
+		ActionOverride(Player%PN%,StartDialogOverride("c4monkd",Myself))
 END
 
 IF
-	Kit(Player%n%,c4Monk)
-	TriggerOverride(Player%n%,Global("c4MonkDialog","Locals",0))
-	TriggerOverride(Player%n%,Global("c4MonkBodyTrainingHLA","Locals",1))
+	Kit(Player%PN%,c4Monk)
+	TriggerOverride(Player%PN%,Global("c4MonkDialog","Locals",0))
+	TriggerOverride(Player%PN%,Global("c4MonkBodyTrainingHLA","Locals",1))
 THEN
 	RESPONSE #100
-		ActionOverride(Player%n%,StartDialogOverride("c4monkd",Myself))
+		ActionOverride(Player%PN%,StartDialogOverride("c4monkd",Myself))
 END

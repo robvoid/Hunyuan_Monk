@@ -1,11 +1,11 @@
 
 
-<<<<<<<< .../inlined/blank.baf
+<<<<<<<< .../c4_inlined/blank.baf
 >>>>>>>>
-COMPILE ~.../inlined/blank.baf~
+COMPILE ~.../c4_inlined/blank.baf~
 AT_EXIT ~del /q override\blank.bcs~ EXACT
 
-<<<<<<<< .../inlined/blank.2da
+<<<<<<<< .../c4_inlined/blank.2da
 2DA                 V1.0
 *
 >>>>>>>>
@@ -407,7 +407,7 @@ DEFINE_PATCH_FUNCTION CREATE_HEADERS_AS_LEVEL
 		level_multiplier = 1 
 BEGIN
 	
-	max_level = (max_level>1 && max_level<=50) ? max_level : 50
+	max_level = (max_level>0 && max_level<=50) ? max_level : 50
 	level_increment = (level_increment>1 && level_increment<=max_level) ? level_increment : 2
 	level_multiplier = (level_multiplier>0 && level_multiplier<max_level) ? level_multiplier : 1
 	
@@ -512,13 +512,15 @@ BEGIN
 			BEGIN
 			
 				/* set new value */
-        PATCH_IF multi_parameter1 != 0 THEN BEGIN
+				//parameter1和savebonus去掉倍数不为0的判断, 用于接受ALTER_EFFECT负值无法生效
+				
+        // PATCH_IF multi_parameter1 != 0 THEN BEGIN
 					PATCH_IF parameter1 != 999999 BEGIN
 						WRITE_LONG offset+0x4 parameter1	+ m*multi_parameter1
 					END ELSE BEGIN
 						WRITE_LONG offset+0x4 parameter1_	+ m*multi_parameter1
 					END
-				END
+				// END
 				
         PATCH_IF multi_duration != 0 THEN BEGIN
 					PATCH_IF duration != 999999 BEGIN
@@ -536,13 +538,13 @@ BEGIN
 					END
 				END
 				
-        PATCH_IF multi_savebonus != 0 THEN BEGIN
+        // PATCH_IF multi_savebonus != 0 THEN BEGIN
 					PATCH_IF savebonus != 999999 BEGIN
 						WRITE_LONG offset+0x28 savebonus	+ m*multi_savebonus
 					END ELSE BEGIN
 						WRITE_LONG offset+0x28 savebonus_	+ m*multi_savebonus
 					END
-				END
+				// END
 				
         PATCH_IF multi_probability1 != 0 THEN BEGIN
 					PATCH_IF probability1 != 999999 BEGIN
@@ -727,8 +729,8 @@ END
 
 /* **************************************** */
 
-DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ conditions=~~ BEGIN
-<<<<<<<< .../inlined/create_observer_baldur.baf
+DEFINE_ACTION_FUNCTION create_observer STR_VAR name=~~ conditions=~True()~ BEGIN
+<<<<<<<< .../c4_inlined/create_observer_baldur.baf
 IF
 	InPartyAllowDead(Player%slot%)
 	%conditions%
@@ -740,13 +742,20 @@ THEN
 		Continue()
 END
 >>>>>>>>
-<<<<<<<< .../inlined/observer.baf
+<<<<<<<< .../c4_inlined/observer.baf
 IF
-	True()
+	!GlobalTimerNotExpired("%name%%slot%_Exists_Timer","Global")
+	%conditions%
 THEN
 	RESPONSE #100
-		SetGlobalTimer("%name%%slot%_Exists_Timer","Global",3)
-		Continue()
+		SetGlobalTimer("%name%%slot%_Exists_Timer","Global",1)
+END
+
+IF
+	!GlobalTimerNotExpired("%name%%slot%_Exists_Timer","Global")
+THEN
+	RESPONSE #100
+		DestroySelf()
 END
 >>>>>>>>
 
@@ -766,16 +775,16 @@ END
 				WRITE_ASCIIE 0xa4 ~~ #400
 				WRITE_ASCIIE 0x248 ~%name%%slot%~ #40
 				WRITE_ASCIIE 0x280 ~%name%%slot%~ #32
-			COPY_EXISTING blank.bcs ~override/c4obtemp.bcs~
-			EXTEND_BOTTOM ~c4obtemp.bcs~ ~.../inlined/create_observer_baldur.baf~ EVAL EVAL
+			COPY_EXISTING blank.bcs ~override/c4obvtmp.bcs~
+			EXTEND_BOTTOM ~c4obvtmp.bcs~ ~.../c4_inlined/create_observer_baldur.baf~ EVAL EVAL
 			COPY_EXISTING_REGEXP GLOB ~baldur.*\.bcs~ override
-				R_B_B ~override/c4obtemp.bcs~ ~override/blank.bcs~ ON_MISMATCH END
+				R_B_B ~override/c4obvtmp.bcs~ ~override/blank.bcs~ ON_MISMATCH END
 			BUT_ONLY
-			EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~.../inlined/create_observer_baldur.baf~ EVAL EVAL
-			MOVE ~override/c4obtemp.bcs~ ~%MOD_FOLDER%/backup/%name%%slot%_baldur.bcs~
+			EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~.../c4_inlined/create_observer_baldur.baf~ EVAL EVAL
+			MOVE ~override/c4obvtmp.bcs~ ~%external_data%/%name%%slot%_baldur.bcs~
 			
 			COPY_EXISTING blank.bcs ~override/%name%%slot%.bcs~
-			EXTEND_BOTTOM ~override/%name%%slot%.bcs~ ~.../inlined/observer.baf~ EVAL
+			EXTEND_BOTTOM ~override/%name%%slot%.bcs~ ~.../c4_inlined/observer.baf~ EVAL EVAL
 		END
 	END ELSE BEGIN
 		PRINT ~Wrong creature name specified !!~
@@ -787,7 +796,7 @@ END
 /* **************************************** */
 
 DEFINE_ACTION_FUNCTION create_one_observer STR_VAR name=~~ conditions=~~ BEGIN
-<<<<<<<< .../inlined/create_one_observer_baldur1.baf
+<<<<<<<< .../c4_inlined/create_one_observer_baldur1.baf
 IF
 	InPartyAllowDead(Player1)
 	%conditions%
@@ -814,13 +823,13 @@ END
 			WRITE_ASCIIE 0xa4 ~~ #400
 			WRITE_ASCIIE 0x248 ~%name%~ #40
 			WRITE_ASCIIE 0x280 ~%name%~ #32
-		COPY_EXISTING blank.bcs ~override/c4obtemp.bcs~
-		EXTEND_BOTTOM ~c4obtemp.bcs~ ~.../inlined/create_one_observer_baldur1.baf~ EVAL EVAL
+		COPY_EXISTING blank.bcs ~override/c4obvtmp.bcs~
+		EXTEND_BOTTOM ~c4obvtmp.bcs~ ~.../c4_inlined/create_one_observer_baldur1.baf~ EVAL EVAL
 		COPY_EXISTING_REGEXP GLOB ~baldur.*\.bcs~ override
-			R_B_B ~override/c4obtemp.bcs~ ~override/blank.bcs~ ON_MISMATCH END
+			R_B_B ~override/c4obvtmp.bcs~ ~override/blank.bcs~ ON_MISMATCH END
 		BUT_ONLY
-		EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~.../inlined/create_one_observer_baldur1.baf~ EVAL EVAL
-		MOVE ~override/c4obtemp.bcs~ ~%MOD_FOLDER%/backup/%name%_baldur.bcs~
+		EXTEND_BOTTOM_REGEXP ~baldur.*\.bcs~ ~.../c4_inlined/create_one_observer_baldur1.baf~ EVAL EVAL
+		MOVE ~override/c4obvtmp.bcs~ ~%external_data%/%name%_baldur.bcs~
 		
 		COPY_EXISTING blank.bcs ~override/%name%.bcs~
 	END ELSE BEGIN
@@ -833,7 +842,7 @@ END
 /* **************************************** */
 
 DEFINE_ACTION_FUNCTION deactivate_observer STR_VAR name=~~ BEGIN
-<<<<<<<< .../inlined/clear_ob.baf
+<<<<<<<< .../c4_inlined/clear_ob.baf
 IF
 	True()
 THEN
@@ -848,7 +857,7 @@ END
 		END
 	BUT_ONLY
 	
-	COMPILE ~.../inlined/clear_ob.baf~
+	COMPILE ~.../c4_inlined/clear_ob.baf~
 	
 	ACTION_IF FILE_EXISTS_IN_GAME ~%name%.bcs~ BEGIN
 		COPY_EXISTING clear_ob.bcs ~override/%name%.bcs~

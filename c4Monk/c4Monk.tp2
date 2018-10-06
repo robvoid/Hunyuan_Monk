@@ -1,101 +1,37 @@
-BACKUP ~c4monk/backup~
+BACKUP ~_c4mods_external/c4monk/backup~
 AUTHOR ~c4demon@gmail.com~
 
-VERSION ~v4.2~
+VERSION ~v4.3~
 AUTO_EVAL_STRINGS
 
-README ~c4monk/languages/%LANGUAGE%/readme.pdf~
-AUTO_TRA ~c4monk/languages/%s~
+README ~c4monk/lang/%LANGUAGE%/readme.pdf~
+
+AUTO_TRA ~%tra_loc%/lang/%s~
 
 ALWAYS
 	
-  INCLUDE ~%MOD_FOLDER%/lib/_always.tph~
+	OUTER_SPRINT mod_root c4monk
+  OUTER_SPRINT base_language "schinese"
+  INCLUDE "c4monk/lib/_immutatable.tph"
+	INCLUDE "c4monk/lib/_always.tph"
 	
 END
 
 LANGUAGE
   ~简体中文~ 	~schinese~
-							~%MOD_FOLDER%/languages/schinese/prompts/prompts-%WEIDU_OS%.tra~
-							~%MOD_FOLDER%/languages/schinese/setup.tra~
-							~%MOD_FOLDER%/languages/schinese/game.tra~
+							~c4monk/lang/schinese/prompts/prompts-%WEIDU_OS%.tra~
+							~c4monk/lang/schinese/setup.tra~
+							// ~c4monk/lang/schinese/game.tra~
   
 BEGIN @-101
 DESIGNATED 1
 REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @-10000
 
-COPY_EXISTING ring01.itm ~data/c4monk_v%c4MonkVer%.mrk~
-  
-// copys
-COPY ~%MOD_FOLDER%/bam~ ~override~
-COPY ~%MOD_FOLDER%/vvc~ ~override~
-
-COPY ~%MOD_FOLDER%/spl~ ~override~
-	LPF ALTER_EFFECT INT_VAR power=0 resist_dispel=2 END
-
-COPY_EXISTING c4mk00.spl override
-	LPF CLONE_EFFECT INT_VAR multi_match=1 opcode=177 parameter1=0 parameter2=2 STR_VAR resource=c4mkchek END
-	LPF CLONE_EFFECT INT_VAR match_opcode=177 STR_VAR resource=c4mkver END
-	
-LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkchek variable=c4MonkCheck END
-LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=c4MonkVer STR_VAR name=c4mkver variable=c4MonkVersion END
-
-// version check
-// OUTER_SPRINT VERSION_CHECK ~%LIBS%/version_check~
-// INCLUDE ~%LIBS%/version_check.tph~
-
-// 元神出窍
-COPY_EXISTING c4mkimmu.spl override
-	WRITE_ASCII 0x3a c4mkimmu
-	LPF ALTER_SPELL_HEADER INT_VAR speed=0 STR_VAR icon=c4mkimmu END
-	LPF ALTER_EFFECT INT_VAR match_timing=0 duration=12 END
-	SAY NAME1 @108
-	SAY UNIDENTIFIED_DESC @109
-	
-// define kit
-INCLUDE ~%LIBS%/addkit.tph~
-
-// fists
-INCLUDE ~%LIBS%/create_fists.tph~
-
-// refine_fists
-INCLUDE ~%LIBS%/refine_fist.tph~
-	
-// Practice
-INCLUDE ~%LIBS%/learn_skill.tph~
-INCLUDE ~%LIBS%/body_training.tph~
-INCLUDE ~%LIBS%/mental_training.tph~
-INCLUDE ~%LIBS%/observers.tph~
-
-// HLAs
-INCLUDE ~%LIBS%/HLAs.tph~
+LAF run STR_VAR file=addkit file_loc=components tra=game END
 
 BEGIN @-102
 DESIGNATED 2
 REQUIRE_PREDICATE MOD_IS_INSTALLED ~c4Monk\c4Monk.tp2~ 1 @-1
 
-COPY_EXISTING_REGEXP GLOB ~.*\.itm~ override
-	SET $target(a) = 288
-	SET $target(b) = 289
-	PHP_EACH target AS type => match_opcode BEGIN
-		GET_OFFSET_ARRAY effect ITM_V10_GEN_EFFECTS
-		PHP_EACH effect AS int => offset BEGIN
-			READ_SHORT offset opcode
-			READ_LONG offset+4 parameter1
-			READ_LONG offset+8 parameter2
-			PATCH_IF opcode=match_opcode BEGIN
-				SPRINT eff_file ~c4mk#%type%%parameter1%%parameter2%~
-				PATCH_IF NOT FILE_EXISTS_IN_GAME ~%eff_file%.eff~ BEGIN
-					PATCH_IF opcode=289 BEGIN opcode1=73 END
-					PATCH_IF opcode=288 BEGIN opcode1=278 END
-					INNER_ACTION BEGIN
-						LAF CREATE_EFFECT INT_VAR opcode=opcode1 target=1 timing=2 parameter1 parameter2
-															STR_VAR name=~%eff_file%~ END
-					END
-				END
-			END
-		END
-		kit_ids = IDS_OF_SYMBOL (kit c4Monk) 
-		LPF DELETE_EFFECT INT_VAR silent=1 match_opcode=177 STR_VAR match_resource=~%eff_file%~ END
-		LPF CLONE_EFFECT INT_VAR silent=1 match_opcode opcode=177 parameter1=kit_ids parameter2=9 STR_VAR resource=~%eff_file%~ END
-	END
-BUT_ONLY
+LAF run STR_VAR file=patch_monk_items file_loc=components tra=game END
+

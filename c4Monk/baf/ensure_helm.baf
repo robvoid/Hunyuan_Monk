@@ -1,10 +1,10 @@
 
 IF
-	Kit(Player%n%,c4Monk)
-	TriggerOverride(Player%n%,Global("c4MonkMentalTraining1","Locals",1))
-	!HasItem("c4mkhelm",Player%n%)
+	Kit(Player%PN%,c4Monk)
+	TriggerOverride(Player%PN%,Global("c4MonkMentalTraining1","Locals",1))
+	!HasItem("c4mkhelm",Player%PN%)
 THEN
 	RESPONSE #100
-		ActionOverride(Player%n%, ReallyForceSpellRES("c4mkhelm",Myself)
-		Continue()
+		ReallyForceSpellRES("c4mkhelm",Player%PN%)
+		// Continue()
 END

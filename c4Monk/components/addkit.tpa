@@ -1,0 +1,50 @@
+DEFINE_ACTION_FUNCTION addkit BEGIN
+
+	// version check
+	// OUTER_SPRINT VERSION_CHECK ~%LIBS%/version_check~
+	// INCLUDE ~%LIBS%/version_check.tph~
+	 
+	// copys
+	COPY ~%mod_root%/bam~ ~override~
+	COPY ~%mod_root%/vvc~ ~override~
+
+	COPY ~%mod_root%/spl~ ~override~
+		LPF ALTER_EFFECT INT_VAR power=0 resist_dispel=2 END
+
+	// version mark
+	COPY ~.../c4_inlined/blank.baf~ ~override/c4monk_version_%c4MonkVer%.mrk~
+
+	COPY_EXISTING c4mk00.spl override
+		LPF CLONE_EFFECT INT_VAR multi_match=1 opcode=177 parameter1=0 parameter2=2 STR_VAR resource=c4mkchek END
+		LPF CLONE_EFFECT INT_VAR match_opcode=177 STR_VAR resource=c4mkver END
+		
+	LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkchek variable=c4MonkCheck END
+	LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=c4MonkVer STR_VAR name=c4mkver variable=c4MonkVersion END
+
+	// ÔªÉñ³öÇÏ
+	COPY_EXISTING c4mkimmu.spl override
+		WRITE_ASCII 0x3a c4mkimmu
+		LPF ALTER_SPELL_HEADER INT_VAR speed=0 STR_VAR icon=c4mkimmu END
+		LPF ALTER_EFFECT INT_VAR match_timing=0 duration=12 END
+		SAY NAME1 @108
+		SAY UNIDENTIFIED_DESC @109
+		
+	// define kit
+	INCLUDE ~%LIBS%/addkit.tph~
+
+	// fists
+	INCLUDE ~%LIBS%/create_fists.tph~
+
+	// refine_fists
+	INCLUDE ~%LIBS%/fist_skill.tph~
+		
+	// Practice
+	INCLUDE ~%LIBS%/learn_skill.tph~
+	INCLUDE ~%LIBS%/body_training.tph~
+	INCLUDE ~%LIBS%/mental_training.tph~
+	INCLUDE ~%LIBS%/observers.tph~
+
+	// HLAs
+	INCLUDE ~%LIBS%/HLAs.tph~
+	
+END

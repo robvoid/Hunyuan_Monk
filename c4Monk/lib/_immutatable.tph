@@ -1,0 +1,283 @@
+
+//////////////////////////////////////////////////////////////////////////////////////
+/////
+///// A modified edition from Library of DavidW's functions used for general
+///// mod-installation in the "immutable" style.
+///// https://github.com/Gibberlings3/immutable
+/////
+///// DavidW的 mod只读设置修改版。用以保持mod文件夹和文件的只读性质，将安装过程中一切
+///// 生成和可能被修改的文件放置于独立目录，避免可能出现的人为错误。
+/////
+//////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+/////
+///// Function-definition part 函数定义部分
+/////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+// blank file 空白文件
+
+<<<<<<<< .../stratagems-inline/blank
+>>>>>>>>
+
+//////////////////////////////////////////////////////////////////////////////////////
+/////
+///// Immutable wrap for HANDLE_CHARSETS 转码调整
+/////
+//////////////////////////////////////////////////////////////////////////////////////
+
+DEFINE_ACTION_FUNCTION handle_charsets_immutably
+	INT_VAR force_tra_rebuild=0
+	STR_VAR tra_base=lang
+					base_language=english
+					rel_iconv_path=""
+	RET			tra_loc
+BEGIN
+// on non-EE, just set the tra loc
+	OUTER_SPRINT tra_loc "%mod_root%/%tra_base%"
+
+// do conversions (ee only)
+	ACTION_IF enhanced_edition BEGIN
+		OUTER_SPRINT tra_loc "%external_loc%/%mod_root%/lang"
+		ACTION_BASH_FOR "%mod_root%/%tra_base%/%LANGUAGE%" ".*\.tra" BEGIN
+			COPY "%BASH_FOR_FILESPEC%" "%tra_loc%/%LANGUAGE%/%BASH_FOR_FILE%"
+		END
+		ACTION_MATCH "%LANGUAGE%" WITH
+		"%base_language%" BEGIN END
+		DEFAULT
+			ACTION_BASH_FOR "%mod_root%/%tra_base%/%base_language%" ".*\.tra" BEGIN
+				COPY "%BASH_FOR_FILESPEC%" "%tra_loc%/%base_language%/%BASH_FOR_FILE%"
+			END
+		END
+		ACTION_IF (!FILE_EXISTS "%tra_loc%/languages_installed.mrk"  && force_tra_rebuild) BEGIN
+			COPY ".../stratagems-inline/blank" "%tra_loc%/languages_installed.mrk"
+			OUTER_SPRINT iconv_path "%mod_root%/%rel_iconv_path%"
+			LAF HANDLE_CHARSETS INT_VAR infer_charsets = 1 STR_VAR iconv_path  tra_path = ~%tra_loc%~  END
+		END
+	END
+END
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+/////
+///// Make and check markers stored in marker_loc 制作和检查marker_loc下的标记文件
+/////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+DEFINE_ACTION_FUNCTION make_label
+	STR_VAR label=""
+BEGIN
+	COPY ~.../stratagems-inline/blank~ ~%marker_loc%/%label%.mrk~
+END
+
+DEFINE_ACTION_FUNCTION check_label
+	STR_VAR label=""
+	RET 		value
+BEGIN
+	ACTION_IF FILE_EXISTS ~%marker_loc%/%label%.mrk~ BEGIN
+		OUTER_SET value=1
+	END ELSE BEGIN
+		OUTER_SET value=0
+	END
+END
+
+DEFINE_PATCH_FUNCTION check_label
+	STR_VAR label=""
+	RET value
+BEGIN
+	INNER_ACTION BEGIN
+		LAF check_label STR_VAR label RET value END
+	END
+END
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+/////
+///// Read an ini file "ini_to_read.ini" into SFO_reserved_ini_hash
+///// (mostly borrowed from Kjeron) ini key values are treated case-insensitive
+///// 读取ini文件的值
+/////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+DEFINE_ACTION_MACRO read_ini_file
+BEGIN 
+	LOCAL_SPRINT key ""
+	ACTION_IF FILE_EXISTS "%ini_to_read%.ini" BEGIN
+		COPY - "%ini_to_read%.ini" "%workspace%"
+			/* REPLACE_EVALUATE ~^\([^ %TAB%%WNL%]+\)=\([^%WNL%$]+\)~ */	
+			// 添加等号两边空格或制表符的识别。队列名改成 ini_hash 方便使用
+			REPLACE_EVALUATE ~^\([^ %TAB%%WNL%]+\)[ %TAB%]*=[ %TAB%]*\([^%WNL%$]+\)~	
+      BEGIN
+				SPRINT key "%MATCH1%"
+				TO_LOWER key
+				TEXT_SPRINT $ini_hash(~%key%~) ~%MATCH2%~
+			END	~~
+	END
+END
+
+DEFINE_PATCH_FUNCTION check_ini
+	STR_VAR ini=""
+	RET			value
+BEGIN
+	TO_LOWER ini
+	PATCH_IF !VARIABLE_IS_SET $ini_hash(~%ini%~) BEGIN
+		SPRINT value 0
+	END ELSE BEGIN
+		SPRINT value $ini_hash(~%ini%~)
+	END
+END
+
+DEFINE_ACTION_FUNCTION check_ini
+	STR_VAR ini=""
+	RET			value
+BEGIN
+	OUTER_PATCH "" BEGIN
+		LPF check_ini STR_VAR ini RET value END
+	END
+END
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+/////
+///// Include and run a program, if appropriate with a tra file
+///// 定义run函数，运行文件内函数。包含文件名、路径、tra文件
+///// 文件名和文件内函数名须完全一样，文件后缀设定为tpa
+///// 当文件、函数或tra文件不存在时报错
+/////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+DEFINE_ACTION_FUNCTION run
+	STR_VAR file=""
+					file_loc=""
+					tra=""
+					version=""
+BEGIN
+	ACTION_IF "%file_loc%" STRING_EQUAL "" BEGIN
+		OUTER_SPRINT filespec "%mod_root%/%file%.tpa"
+	END ELSE BEGIN
+		OUTER_SPRINT filespec "%mod_root%/%file_loc%/%file%.tpa"
+	END
+	ACTION_IF !FILE_EXISTS "%filespec%" BEGIN
+		FAIL "You have tried to run '%file%', but '%filespec%' doesn't exist"
+	END
+	// PRINT ~Including and running function %file%~
+	INCLUDE ~%filespec%~
+	WITH_TRA "%tra_loc%/%base_language%/%tra%.tra" "%tra_loc%/%LANGUAGE%/%tra%.tra" BEGIN
+		LAF ~%file%~ STR_VAR version END
+	END
+END
+
+// end of function-definition part
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+/////
+///// Live-code part
+/////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+ACTION_IF !VARIABLE_IS_SET immutable_initialise BEGIN // only do this once, not once per component
+	OUTER_SET immutable_initialise=1
+	SILENT
+	
+	//////////////////////////////////////////////////////////////
+  /// Determine if this is the Enhanced Edition.
+	/// 增强版判定
+	//////////////////////////////////////////////////////////////
+
+	OUTER_SET enhanced_edition=(GAME_IS "bgee bg2ee iwdee eet") ? 1 : 0
+
+	//////////////////////////////////////////////////////////////
+	/// set the default variables if they're not set already
+	/// 初始化变量
+	//////////////////////////////////////////////////////////////
+
+	ACTION_IF !VARIABLE_IS_SET mod_root BEGIN
+		OUTER_SPRINT mod_root "%MOD_FOLDER%"
+	END
+
+	ACTION_IF !VARIABLE_IS_SET external_loc BEGIN
+		OUTER_SPRINT external_loc _c4mods_external
+	END
+
+	ACTION_IF !VARIABLE_IS_SET tra_base BEGIN
+		OUTER_SPRINT tra_base lang
+	END
+
+	ACTION_IF !VARIABLE_IS_SET rel_iconv_path BEGIN
+		OUTER_SPRINT rel_iconv_path "lang/iconv"
+	END
+
+	ACTION_IF !VARIABLE_IS_SET base_language BEGIN
+		OUTER_SPRINT base_language english
+	END
+
+	ACTION_IF !VARIABLE_IS_SET tra_setup BEGIN
+		OUTER_SPRINT tra_setup setup
+	END
+
+	//////////////////////////////////////////////////////////////
+	/// make the external folders
+	/// 创建输出文件夹
+	//////////////////////////////////////////////////////////////
+
+	MKDIR "%external_loc%"
+	MKDIR "%external_loc%/%mod_root%/workspace"
+	MKDIR "%external_loc%/%mod_root%/data"
+	MKDIR "%external_loc%/%mod_root%/markers"
+	MKDIR "%external_loc%/%mod_root%/lang"
+
+	//////////////////////////////////////////////////////////////
+	/// Set variables for the external locations
+	/// 外部文件夹名称
+	//////////////////////////////////////////////////////////////
+
+	OUTER_SPRINT workspace "%external_loc%/%mod_root%/workspace"
+	OUTER_SPRINT external_data "%external_loc%/%mod_root%/data"
+	OUTER_SPRINT marker_loc "%external_loc%/%mod_root%/markers"
+
+	//////////////////////////////////////////////////////////////
+	/// process the ini files
+	/// 读取ini文件
+	//////////////////////////////////////////////////////////////
+
+	ACTION_IF VARIABLE_IS_SET ini_file BEGIN
+		OUTER_SPRINT ini_to_read "%mod_root%/%ini_file%"
+		LAM read_ini_file
+	END
+
+	ACTION_IF VARIABLE_IS_SET user_ini_file BEGIN
+		OUTER_SPRINT ini_to_read "%mod_root%/%user_ini_file%"
+		LAM read_ini_file
+	END
+
+	//////////////////////////////////////////////////////////////
+	/// read in the translations
+	/// tra文件转码和读取
+	//////////////////////////////////////////////////////////////
+
+	LAF check_ini STR_VAR ini=force_tra_rebuild RET value END
+	OUTER_SET force_tra_rebuild=value
+	LAF handle_charsets_immutably
+		INT_VAR force_tra_rebuild
+		STR_VAR tra_base rel_iconv_path base_language
+		RET tra_loc
+	END
+
+	//////////////////////////////////////////////////////////////
+	/// reload setup.tra
+	/// 读取未转码的安装界面tra
+	//////////////////////////////////////////////////////////////
+
+	LOAD_TRA "%tra_loc%/%base_language%/%tra_setup%.tra" "%tra_loc%/%LANGUAGE%/%tra_setup%.tra"
+	VERBOSE
+END
+/// end of live-code part

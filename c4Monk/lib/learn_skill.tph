@@ -3,20 +3,19 @@ COPY ~c4monk/dlg/c4MonkD_0.d~ ~c4monk/dlg/c4MonkD.d~
 	REPLACE_TEXTUALLY "DO ~\(.*\)~" "DO ~\1~ %INSTANT_ACTIONS_FLAGS%"
 	REPLACE_TEXTUALLY "\([^%]\)SetGlobal(\(.*\))" "\1%INSTANT_ACTIONS_TOBEX%SetGlobal(\2)"
 
-COMPILE ~%MOD_FOLDER%/dlg/c4MonkD.d~
+COMPILE ~%mod_root%/dlg/c4MonkD.d~
 	
 COPY_EXISTING c4mkski1.spl override
 	WRITE_ASCII 0x3a c4mkskib
 	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkskib END
 	SAY NAME1 @100
-	
+	SAY UNIDENTIFIED_DESC @110
+
 LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkskil variable=c4MonkDialog END
 
-COPY_EXISTING c4mkski2.spl override
-	WRITE_ASCII 0x3a c4mkskib
-	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkskib END
-	SAY NAME1 @2019
-	SAY UNIDENTIFIED_DESC @2020
-	
-LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkski2 variable=c4MonkMoreSkillPoint END
-
+OUTER_FOR (i=2;i<51;i+=2) BEGIN
+	COPY ~%mod_root%/spl/base/c4mksp0.spl~ ~override/c4mksp%i%.spl~
+		LPF ALTER_EFFECT STR_VAR match_resource=level resource=~c4mksp%i%~ END
+	LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=~c4mksp%i%~ variable=~c4MonkAddSkillPoint%i%~ END
+END
+LAF CREATE_EFFECT INT_VAR opcode=309 timing=1 parameter1=1 parameter2=1 STR_VAR name=~c4mksp0~ resource=~c4MonkSk~ resource2=~illPoint~ END

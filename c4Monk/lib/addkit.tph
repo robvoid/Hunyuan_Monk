@@ -5,7 +5,7 @@ COPY_EXISTING c4mkac0.spl override
 	LPF ALTER_HEADER_EFFECTS_AS_LEVEL INT_VAR parameter1=9 multi_parameter1=~-1~ END
 
 //clab
-COPY ~%MOD_FOLDER%/2da/clabc4mk.2da~ override
+COPY ~%mod_root%/2da/clabc4mk.2da~ override
 	COUNT_2DA_COLS cols
 	READ_2DA_ENTRIES_NOW rows cols
 	FOR (i=0;i<rows;++i) BEGIN
@@ -42,7 +42,7 @@ COPY ~%MOD_FOLDER%/2da/clabc4mk.2da~ override
 	SET_2DA_ENTRY_LATER new_line 3 2 ~GA_C4MKSKI1~
 	//ÉèÖÃÈ­Í·
 	FOR (i=1;i<cols;++i) BEGIN
-		SET_2DA_ENTRY_LATER new_line 4 i ~AP_C4MKFIST~
+		SET_2DA_ENTRY_LATER new_line 4 i ~AP_C4MKBF%i%~
 	END
  	//»ù´¡AC
 	SET_2DA_ENTRY_LATER new_line 5 1 ~AP_C4MKAC0~
@@ -55,70 +55,44 @@ COPY ~%MOD_FOLDER%/2da/clabc4mk.2da~ override
 	END
 	SET_2DA_ENTRIES_NOW new_line cols
 	PRETTY_PRINT_2DA
-		
-ACTION_IF GAME_IS ~tob bgt~ BEGIN
-	//clab
-	MOVE ~override/clabc4mk.2da~ ~override/clabmo01.2da~
-		
-	//hla
-	COPY_EXISTING - luabbr.2da override
-		READ_2DA_ENTRIES_NOW rows 2
-		FOR (i=0;i<rows;++i) BEGIN
-			READ_2DA_ENTRY_FORMER rows i 0 kitname
-			READ_2DA_ENTRY_FORMER rows i 1 string
-			PATCH_IF ~%kitname%~ STR_EQ ~MONK~ BEGIN
-				SPRINT filename ~lu%string%~
-			END
-		END
-		
-	COPY ~%MOD_FOLDER%/2da/luc4monk.2da~ ~override/%filename%.2da~
 	
-	// ×Ö·û´®
-  STRING_SET 45851 @1
-  STRING_SET 45858 @2
-  STRING_SET 45861 @2
-  STRING_SET 45867 @3
-			
-END ELSE ACTION_IF GAME_IS ~bgee bg2ee eet iwdee~ BEGIN		
-	//hla
-	COPY ~%MOD_FOLDER%/2da/luc4monk.2da~ override
-	
-	ADD_KIT c4Monk	
-		// CLASWEAP.2DA
-		~c4Monk 1 1 1 1 1 0 0 0~
-		// WEAPPROF.2DA
-		~c4Monk 0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
-		// ABCLASRQ.2DA
-		~c4Monk 0 9 9 0 9 0~
-		// ABCLSMOD.2DA
-		~c4Monk 0 0 0 0 0 0~
-		// ABDCDSRQ.2DA
-		~c4Monk 0 0 0 0 0 0~
-		// ABDCSCRQ.2DA
-		~c4Monk 0 0 0 0 0 0~
-		// ALIGNMNT.2DA
-		~c4Monk 1 1 1 0 0 0 0 0 0~
-		// DUALCLAS.2DA
-		~c4Monk 0 0 0 0 0 0~
-		// KITLIST.2DA ABILITIES
-		~override/clabc4mk.2da~
-		// KITTABLE.2DA
-		~K_MN_H~
-		// KITLIST.2DA UNUSABLE CLASS
-		~0x00004000 20~
-		// LUABBR.2DA
-		~c4monk~
-		// 25STWEAP.2DA
-		~* * HELM19 BAG23 RING06 RING29 CLCK02 BOOT01 AMUL19 BRAC19 BELT06 * * * POTN52,5 POTN04,2 POTN14,5 * * * ~
-		SAY @1 // KITLIST.2DA LOWER
-		SAY @2 // KITLIST.2DA MIXED
-		SAY @3 // KITLIST.2DA HELP
-	
-	INCLUDE ~%LIBS%/fl#add_kit_ee.tpa~
-	LAF fl#add_kit_ee STR_VAR
-		kit_name=c4Monk
-		thiefskl=~0 0~
-		thiefscl=~0 0 0 0 0 0 0 0~
-	END
+ADD_KIT c4Monk	
+	// CLASWEAP.2DA
+	~c4Monk 1 1 1 1 1 0 0 0~
+	// WEAPPROF.2DA
+	~c4Monk 0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
+	// ABCLASRQ.2DA
+	~c4Monk 0 9 9 0 9 0~
+	// ABCLSMOD.2DA
+	~c4Monk 0 0 0 0 0 0~
+	// ABDCDSRQ.2DA
+	~c4Monk 0 0 0 0 0 0~
+	// ABDCSCRQ.2DA
+	~c4Monk 0 0 0 0 0 0~
+	// ALIGNMNT.2DA
+	~c4Monk 1 1 1 0 0 0 0 0 0~
+	// DUALCLAS.2DA
+	~c4Monk 0 0 0 0 0 0~
+	// KITLIST.2DA ABILITIES
+	~override/clabc4mk.2da~
+	// KITTABLE.2DA
+	~K_MN_H~
+	// KITLIST.2DA UNUSABLE CLASS
+	~0x00004000 20~
+	// LUABBR.2DA
+	~c4monk~
+	// 25STWEAP.2DA
+	~* * HELM19 BAG23 RING06 RING29 CLCK02 BOOT01 AMUL19 BRAC19 BELT06 * * * POTN52,5 POTN04,2 POTN14,5 * * * ~
+	SAY @1 // KITLIST.2DA LOWER
+	SAY @2 // KITLIST.2DA MIXED
+	SAY @3 // KITLIST.2DA HELP
+
+//hla
+COPY ~%mod_root%/2da/luc4monk.2da~ override
+
+INCLUDE ~%LIBS%/fl#add_kit_ee.tpa~
+LAF fl#add_kit_ee STR_VAR
+	kit_name=c4Monk
+	thiefskl=~0 0~
+	thiefscl=~0 0 0 0 0 0 0 0~
 END
-	

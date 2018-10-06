@@ -1,11 +1,11 @@
 
 ////身法
-LAF skill_creation STR_VAR spellname=c4mkbd END
+// LAF skill_creation STR_VAR spellname=c4mkbd END
 
 //小图标
-LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF ((AT 211)) STR_VAR bam_file=c4mkbd1d RET c4mkbd1d=icon END
-LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF ((AT 221)) STR_VAR bam_file=c4mkbd2d RET c4mkbd2d=icon END
-LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF ((AT 231)) STR_VAR bam_file=c4mkbd3d RET c4mkbd3d=icon END
+LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF (@211) STR_VAR bam_file=c4mkbd1d RET c4mkbd1d=icon END
+LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF (@221) STR_VAR bam_file=c4mkbd2d RET c4mkbd2d=icon END
+LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF (@231) STR_VAR bam_file=c4mkbd3d RET c4mkbd3d=icon END
 
 OUTER_FOR (i=1;i<6;++i) BEGIN
 	OUTER_PATCH_SAVE level ~%i%~ BEGIN
@@ -13,7 +13,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	END
 	
 	//根法术
-	COPY_EXISTING ~c4mkbd0-.spl~ ~override/c4mkbd%level%-.spl~
+	COPY ~%mod_root%/spl/base/c4mkbd0-.spl~ ~override/c4mkbd%level%-.spl~
 		WRITE_ASCII 0x3a C4MKBD
 		LPF ALTER_SPELL_HEADER STR_VAR icon=C4MKBD END
 		name=i+200
@@ -22,13 +22,13 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		LPF ALTER_EFFECT STR_VAR resource=~c4mkbd%level%~ END	
 		
 	//使用的表格
-	COPY ~%MOD_FOLDER%/2da/c4mkbd0.2da~ ~override/c4mkbd%level%.2da~
+	COPY ~%mod_root%/2da/c4mkbd0.2da~ ~override/c4mkbd%level%.2da~
 		SET_2DA_ENTRY 0 1 3 ~c4mkbd1%level%~
 		SET_2DA_ENTRY 1 1 3 ~c4mkbd2%level%~
 		SET_2DA_ENTRY 2 1 3 ~c4mkbd3%level%~
 		
 	//铁布衫
-	COPY_EXISTING c4mkbd1.spl ~override/c4mkbd1%level%.spl~
+	COPY ~%mod_root%/spl/base/c4mkbd1.spl~ ~override/c4mkbd1%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD1
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD1 END
 		SAY NAME1 @211
@@ -41,7 +41,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		END
 	
 	//真元护体
-	COPY_EXISTING c4mkbd2.spl ~override/c4mkbd2%level%.spl~
+	COPY ~%mod_root%/spl/base/c4mkbd2.spl~ ~override/c4mkbd2%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD2
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD2 END
 		SAY NAME1 @221
@@ -55,7 +55,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		// LPF CLONE_EFFECT INT_VAR match_opcode=27 opcode=155 parameter1=0 END 
 	
 	//天罡战气
-	COPY_EXISTING c4mkbd3.spl ~override/c4mkbd3%level%.spl~
+	COPY ~%mod_root%/spl/base/c4mkbd3.spl~ ~override/c4mkbd3%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD3
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD3 END
 		SAY NAME1 @231
@@ -77,7 +77,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		WRITE_SHORT 0x206 THIS*2
 	ADD_PROJECTILE ~override/c4mkbd3p.pro~
 		
-	COPY_EXISTING c4mkbd3_.spl ~override/c4mkbd3%i%.spl~
+	COPY ~%mod_root%/spl/base/c4mkbd30.spl~ ~override/c4mkbd3%i%.spl~
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=c4mkbd3p END
 		PATCH_FOR_EACH bd IN 1 2 3 4 5 y BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd3%bd%~ END
@@ -90,23 +90,24 @@ END
 
 
 ////高等身法
-COPY_EXISTING spcl819.spl ~override/c4mkbdx.spl~
+LAF CREATE_EMPTY_SPELL STR_VAR name=c4mkbdx END
+COPY_EXISTING c4mkbdx.spl override
 	SAY NAME1 @2007
 	SAY UNIDENTIFIED_DESC @2008
 	WRITE_ASCII 0x3a c4mkbdxb
 	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkbdxb END
-	LPF ALTER_EFFECT INT_VAR opcode=177 parameter1=0 parameter2=2 STR_VAR resource=~c4mkbdx~ END
+	LPF ADD_SPELL_EFFECT INT_VAR opcode=177 target=2 timing=1 parameter2=2 STR_VAR resource=~c4mkbdx~ END
 	
 LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkbdx variable=c4MonkBodyTrainingHLA END
 	
 COPY_EXISTING c4mkbd.bam ~override/c4mkbdxb.bam~
 
-COPY ~%MOD_FOLDER%/2da/c4mkbd0.2da~ ~override/c4mkbdx.2da~
+COPY ~%mod_root%/2da/c4mkbd0.2da~ ~override/c4mkbdx.2da~
 	SET_2DA_ENTRY 0 1 3 ~c4mkbd1x~
 	SET_2DA_ENTRY 1 1 3 ~c4mkbd2x~
 	SET_2DA_ENTRY 2 1 3 ~c4mkbd3x~
 	
-COPY_EXISTING ~c4mkbd0-.spl~ ~override/c4mkbdx-.spl~
+COPY ~%mod_root%/spl/base/c4mkbd0-.spl~ ~override/c4mkbdx-.spl~
 	SAY NAME1 @2007
 	SAY UNIDENTIFIED_DESC @2008
 	LPF ALTER_EFFECT STR_VAR resource=~c4mkbdx~ END
@@ -128,8 +129,9 @@ COPY_EXISTING c4mkbd1e.spl ~override/c4mkbd1x.spl~
 		LPF CLONE_EFFECT INT_VAR match_opcode=146 match_timing=1 timing=4 duration=delay STR_VAR insert=last END
 	END
 	
-COPY_EXISTING spcl819.spl ~override/c4mkbd1y.spl~
-	LPF ALTER_EFFECT INT_VAR opcode=218 timing=10 duration=100 parameter1=1 END
+LAF CREATE_EMPTY_SPELL STR_VAR name=c4mkbd1y END
+COPY_EXISTING c4mkbd1y.spl override
+	LPF ADD_SPELL_EFFECT INT_VAR opcode=218 target=2 timing=10 duration=100 parameter1=1 END
 	
 //真元护体
 COPY_EXISTING c4mkbd2e.spl ~override/c4mkbd2x.spl~

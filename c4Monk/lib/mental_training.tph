@@ -1,5 +1,6 @@
 	
 OUTER_FOR (x=1;x<5;++x) BEGIN
+	COPY ~%mod_root%/spl/base/c4mkmt%x%0.spl~ ~%workspace%~
 	LAF skill_creation STR_VAR spellname=~c4mkmt%x%~ END
 	COPY_EXISTING ~c4mkmt%x%a.spl~ override
 		WRITE_LONG 8 ~-1~
@@ -16,4 +17,6 @@ COPY_EXISTING_REGEXP GLOB ~c4mkmt4.*\.spl~ override
 BUT_ONLY
 
 //Áè²¨Î¢²½¼ÓÍ·¿ø
-COPY ~%MOD_FOLDER%/itm/c4mkhelm.itm~ override
+COPY ~%mod_root%/itm/c4mkhelm.itm~ override
+	SAY NAME1 @315
+	SAY DESC	@316
