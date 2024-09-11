@@ -1,7 +1,7 @@
 BACKUP ~_c4mods_external/c4monk/backup~
 AUTHOR ~c4demon@gmail.com~
 
-VERSION ~v4.3~
+VERSION ~v4.4~
 AUTO_EVAL_STRINGS
 
 README ~c4monk/lang/%LANGUAGE%/readme.pdf~
@@ -18,7 +18,7 @@ ALWAYS
 END
 
 LANGUAGE
-  ~¼òÌåÖÐÎÄ~ 	~schinese~
+  ~ç®€ä½“ä¸­æ–‡~ 	~schinese~
 							~c4monk/lang/schinese/prompts/prompts-%WEIDU_OS%.tra~
 							~c4monk/lang/schinese/setup.tra~
 							// ~c4monk/lang/schinese/game.tra~

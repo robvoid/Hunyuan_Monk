@@ -512,7 +512,7 @@ BEGIN
 			BEGIN
 			
 				/* set new value */
-				//parameter1ºÍsavebonusÈ¥µô±¶Êı²»Îª0µÄÅĞ¶Ï, ÓÃÓÚ½ÓÊÜALTER_EFFECT¸ºÖµÎŞ·¨ÉúĞ§
+				//parameter1å’Œsavebonuså»æ‰å€æ•°ä¸ä¸º0çš„åˆ¤æ–­, ç”¨äºæ¥å—ALTER_EFFECTè´Ÿå€¼æ— æ³•ç”Ÿæ•ˆ
 				
         // PATCH_IF multi_parameter1 != 0 THEN BEGIN
 					PATCH_IF parameter1 != 999999 BEGIN
@@ -592,45 +592,45 @@ END
 
 DEFINE_PATCH_FUNCTION ADD_ITEM_HEADER 
 	INT_VAR				
-		/* ÎŞ±ê×¢µÄÄ¬ÈÏ0 */
-		new_header_type 			=	3 /* ĞÂ½¨µÄÍ·²¿ÀàĞÍ, Ä¬ÈÏ3-Ä§·¨ */
-		identify 							=	0 /* ÊÇ·ñĞèÒª±æÊ¶ºó²ÅÄÜÊ¹ÓÃ */
-		location 							= 3 /* ¼¼ÄÜÎ»ÖÃ, 3-×°±¸ */
-		target 								= 1 /* Ä¿±ê,Ä¬ÈÏ1-ÉúÎï */
-		range 								= 40 /* Éä³Ì,Ä¬ÈÏ40 */
-		launcher 							= 0 /* Í¶ÉäÀàĞÍ */
-		speed 								= 0 /* ËÙ¶È */
-		/* ÒÔÏÂ¼¸¸ö½öÀàĞÍ1-ÎäÆ÷ÓĞĞ§ */
-		thac0_bonus 					= 0 /* THAC0½±Àø */
-		dicesize 							= 0 /* ÉËº¦÷»Ãæ */
-		dicenumber 						= 0 /* ÉËº¦÷»Êı */
-		damage_bonus 					= 0 /* ÉËº¦½±Àø */
-		damage_type 					= 0 /* ÉËº¦ÀàĞÍ */
-		animation_overhand		= 0 /* ¶¯»­¼¸ÂÊ-Åü¿³ */
-		animation_backhand		= 0 /* ¶¯»­¼¸ÂÊ-»Ó¿³ */
-		animation_thrust			= 0 /* ¶¯»­¼¸ÂÊ-´©´Ì */
+		/* æ— æ ‡æ³¨çš„é»˜è®¤0 */
+		new_header_type 			=	3 /* æ–°å»ºçš„å¤´éƒ¨ç±»å‹, é»˜è®¤3-é­”æ³• */
+		identify 							=	0 /* æ˜¯å¦éœ€è¦è¾¨è¯†åæ‰èƒ½ä½¿ç”¨ */
+		location 							= 3 /* æŠ€èƒ½ä½ç½®, 3-è£…å¤‡ */
+		target 								= 1 /* ç›®æ ‡,é»˜è®¤1-ç”Ÿç‰© */
+		range 								= 40 /* å°„ç¨‹,é»˜è®¤40 */
+		launcher 							= 0 /* æŠ•å°„ç±»å‹ */
+		speed 								= 0 /* é€Ÿåº¦ */
+		/* ä»¥ä¸‹å‡ ä¸ªä»…ç±»å‹1-æ­¦å™¨æœ‰æ•ˆ */
+		thac0_bonus 					= 0 /* THAC0å¥–åŠ± */
+		dicesize 							= 0 /* ä¼¤å®³éª°é¢ */
+		dicenumber 						= 0 /* ä¼¤å®³éª°æ•° */
+		damage_bonus 					= 0 /* ä¼¤å®³å¥–åŠ± */
+		damage_type 					= 0 /* ä¼¤å®³ç±»å‹ */
+		animation_overhand		= 0 /* åŠ¨ç”»å‡ ç‡-åŠˆç  */
+		animation_backhand		= 0 /* åŠ¨ç”»å‡ ç‡-æŒ¥ç  */
+		animation_thrust			= 0 /* åŠ¨ç”»å‡ ç‡-ç©¿åˆº */
 		/* **************************************** */
-		primary_type 					= 0 /* »ù´¡Ñ§ÅÉ */
-		secondary_type 				= 0 /* ´ÎÒªÑ§ÅÉ */
-		charges 							= 0 /* ³äÄÜÊı */
-		drained 							= 0 /* ³äÄÜÀàĞÍ */
-		projectile 						= 0 /* Í¶Éä¶¯»­ */
-		arrow 								= 0 /* µ¯Ò©ÀàĞÍ-¼ı */
-		bolt 									= 0 /* µ¯Ò©ÀàĞÍ-Ê¸ */
-		bullet 								= 0 /* µ¯Ò©ÀàĞÍ-µ¯Íè */
-		flag_strength 				= 0/* Ê¹ÓÃÁ¦Á¿½±Àø */
-		flag_break 						= 0 /* Ò×Ëé */
-		flag_hostile 					= 0 /* µĞ¶Ô */
-		flag_recharge 				= 0 /* ÊÇ·ñ¿É³äÄÜ */
-		flag_bypass 					= 0 /* ÎŞÊÓ¶Ü, ½öIWD2 */
-		flag_keenedge 				= 0 /* ·æÈñ, ½öIWD2 */
-		flag_backstab 				= 0 /* ¿É±³´Ì, ½öEE, »ò°²×°ÁËToBEx²¢¿ªÆô */
-		flag_noinvisible			= 0 /* ÎŞ·¨Ãé×¼ÒşĞÎÉúÎï, ½öEE, »ò°²×°ÁËToBEx²¢¿ªÆô */
+		primary_type 					= 0 /* åŸºç¡€å­¦æ´¾ */
+		secondary_type 				= 0 /* æ¬¡è¦å­¦æ´¾ */
+		charges 							= 0 /* å……èƒ½æ•° */
+		drained 							= 0 /* å……èƒ½ç±»å‹ */
+		projectile 						= 0 /* æŠ•å°„åŠ¨ç”» */
+		arrow 								= 0 /* å¼¹è¯ç±»å‹-ç®­ */
+		bolt 									= 0 /* å¼¹è¯ç±»å‹-çŸ¢ */
+		bullet 								= 0 /* å¼¹è¯ç±»å‹-å¼¹ä¸¸ */
+		flag_strength 				= 0/* ä½¿ç”¨åŠ›é‡å¥–åŠ± */
+		flag_break 						= 0 /* æ˜“ç¢ */
+		flag_hostile 					= 0 /* æ•Œå¯¹ */
+		flag_recharge 				= 0 /* æ˜¯å¦å¯å……èƒ½ */
+		flag_bypass 					= 0 /* æ— è§†ç›¾, ä»…IWD2 */
+		flag_keenedge 				= 0 /* é”‹é”, ä»…IWD2 */
+		flag_backstab 				= 0 /* å¯èƒŒåˆº, ä»…EE, æˆ–å®‰è£…äº†ToBExå¹¶å¼€å¯ */
+		flag_noinvisible			= 0 /* æ— æ³•ç„å‡†éšå½¢ç”Ÿç‰©, ä»…EE, æˆ–å®‰è£…äº†ToBExå¹¶å¼€å¯ */
 	STR_VAR 
-		icon 									= ~~ /* Ê¹ÓÃÍ¼±ê */
-		name 									= ~~ /* ÌáÊ¾ÎÄ×Ö, ¿ÉÓÃ@+Êı×Ö¶ÁÈ¡traÎÄ¼ş, »òÖ±½ÓÊäÈëÎÄ×Ö. */
+		icon 									= ~~ /* ä½¿ç”¨å›¾æ ‡ */
+		name 									= ~~ /* æç¤ºæ–‡å­—, å¯ç”¨@+æ•°å­—è¯»å–traæ–‡ä»¶, æˆ–ç›´æ¥è¾“å…¥æ–‡å­—. */
 	RET
-		new_header 								 /* ĞÂ½¨µÄÍ·²¿Î»ÖÃ, ¹©ADD_ITEM_EFFECTµ÷ÓÃ */
+		new_header 								 /* æ–°å»ºçš„å¤´éƒ¨ä½ç½®, ä¾›ADD_ITEM_EFFECTè°ƒç”¨ */
 BEGIN
 		LPF FJ_SPL_ITM_REINDEX END
 		
@@ -945,7 +945,7 @@ DEFINE_ACTION_FUNCTION	ADD_SPLPROT	INT_VAR	stat = 0	value = 0	relation = 0	RET	n
 		END
 		PATCH_IF (new_row = 0)	BEGIN
 			FOR(current_row = 0; current_row < rows; ++current_row)	BEGIN	READ_2DA_ENTRY current_row 1 cols check_stat
-				// PATCH_IF (~%check_stat%~ STRING_EQUAL ~*~)	BEGIN	new_row = current_row	current_row = rows	END //²»¼ì²é¿ÕĞĞÖ±½ÓÌí¼Ó
+				// PATCH_IF (~%check_stat%~ STRING_EQUAL ~*~)	BEGIN	new_row = current_row	current_row = rows	END //ä¸æ£€æŸ¥ç©ºè¡Œç›´æ¥æ·»åŠ 
 			END
 			PATCH_IF (new_row = 0)	BEGIN	new_row = rows	INSERT_2DA_ROW rows cols ~%new_row%		   %stat%		   %value%		   %relation%~
 			END	ELSE	BEGIN	SET_2DA_ENTRY new_row 1 cols ~%stat%~	SET_2DA_ENTRY new_row 2 cols ~%value%~	SET_2DA_ENTRY new_row 3 cols ~%relation%~	END

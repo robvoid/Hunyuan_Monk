@@ -1,8 +1,8 @@
 
-//»ù´¡AC
+//åŸºç¡€AC
 COPY_EXISTING c4mkac0.spl override
 	LPF CREATE_HEADERS_AS_LEVEL INT_VAR level_multiplier=2 END
-	LPF ALTER_HEADER_EFFECTS_AS_LEVEL INT_VAR parameter1=9 multi_parameter1=~-1~ END
+	LPF ALTER_HEADER_EFFECTS_AS_LEVEL INT_VAR parameter1=7 multi_parameter1=~-1~ END
 
 //clab
 COPY ~%mod_root%/2da/clabc4mk.2da~ override
@@ -13,21 +13,21 @@ COPY ~%mod_root%/2da/clabc4mk.2da~ override
 			SET_2DA_ENTRY_LATER new_line i j ~****~
 		END
 	END
-	//Ô­°æÄÜÁ¦
-	SET_2DA_ENTRY_LATER new_line 0 5 ~AP_SPCL814~ //ÃâÒß¼²²¡ºÍ¼Ó¼õËÙ
-	SET_2DA_ENTRY_LATER new_line 0 8 ~AP_SPCL816~ //ËÙ¶ÈÒò×Ó
+	//åŸç‰ˆèƒ½åŠ›
+	SET_2DA_ENTRY_LATER new_line 0 5 ~AP_SPCL814~ //å…ç–«ç–¾ç—…å’ŒåŠ å‡é€Ÿ
+	SET_2DA_ENTRY_LATER new_line 0 8 ~AP_SPCL816~ //é€Ÿåº¦å› å­
 	SET_2DA_ENTRY_LATER new_line 0 12 ~AP_SPCL816~
-	SET_2DA_ENTRY_LATER new_line 0 9 ~AP_SPCL817~ //ÃâÒß÷È»ó
-	SET_2DA_ENTRY_LATER new_line 0 11 ~AP_SPCL818~ //ÃâÒßÖĞ¶¾
-	SET_2DA_ENTRY_LATER new_line 0 20 ~AP_SPCL821~ //ÃâÒßÆÕÍ¨ÎäÆ÷
-	//ÒÆ¶¯ËÙ¶È
+	SET_2DA_ENTRY_LATER new_line 0 9 ~AP_SPCL817~ //å…ç–«é­…æƒ‘
+	SET_2DA_ENTRY_LATER new_line 0 11 ~AP_SPCL818~ //å…ç–«ä¸­æ¯’
+	SET_2DA_ENTRY_LATER new_line 0 20 ~AP_SPCL821~ //å…ç–«æ™®é€šæ­¦å™¨
+	//ç§»åŠ¨é€Ÿåº¦
 	SET_2DA_ENTRY_LATER new_line 1 1 ~AP_SPCL812~
 	FOR (i=5;i<cols;i+=4) BEGIN
 		SET_2DA_ENTRY_LATER new_line 1 i ~AP_SPCL813~
 	END
-	//ĞÂÄÜÁ¦
-	SET_2DA_ENTRY_LATER new_line 2 1 ~AP_C4MK00~ //±»¶¯
-	// ĞÂÈ­Í·ĞÎÊ½, ¹¥»÷´ÎÊıÊÖ¶¯Ìí¼Ó. EEÖĞÎäÉ®18¼¶Ç°¹¥»÷´ÎÊıËÆºõÎªÓ²±àÂë, ÎŞĞëµ¥¶ÀÌí¼Ó
+	//æ–°èƒ½åŠ›
+	SET_2DA_ENTRY_LATER new_line 2 1 ~AP_C4MK00~ //è¢«åŠ¨
+	// æ–°æ‹³å¤´å½¢å¼, æ”»å‡»æ¬¡æ•°æ‰‹åŠ¨æ·»åŠ . EEä¸­æ­¦åƒ§18çº§å‰æ”»å‡»æ¬¡æ•°ä¼¼ä¹ä¸ºç¡¬ç¼–ç , æ— é¡»å•ç‹¬æ·»åŠ 
 	PATCH_FOR_EACH apr_col IN 24 30 BEGIN 
 		SET_2DA_ENTRY_LATER new_line 2 apr_col ~AP_C4MKAPR~
 	END
@@ -36,20 +36,20 @@ COPY ~%mod_root%/2da/clabc4mk.2da~ override
 			SET_2DA_ENTRY_LATER new_line 2 apr_col ~AP_C4MKAPR~
 		END
 	END
-	//ÔªÉñ³öÇÏ
+	//å…ƒç¥å‡ºçª
 	SET_2DA_ENTRY_LATER new_line 3 1 ~GA_C4MKIMMU~
-	//¼¼ÄÜÑ§Ï°
+	//æŠ€èƒ½å­¦ä¹ 
 	SET_2DA_ENTRY_LATER new_line 3 2 ~GA_C4MKSKI1~
-	//ÉèÖÃÈ­Í·
+	//è®¾ç½®æ‹³å¤´
 	FOR (i=1;i<cols;++i) BEGIN
 		SET_2DA_ENTRY_LATER new_line 4 i ~AP_C4MKBF%i%~
 	END
- 	//»ù´¡AC
+ 	//åŸºç¡€AC
 	SET_2DA_ENTRY_LATER new_line 5 1 ~AP_C4MKAC0~
 	FOR (i=2;i<cols;i+=2) BEGIN
 		SET_2DA_ENTRY_LATER new_line 5 i ~AP_C4MKAC0~
 	END
-	//¶îÍâAC¼Ó³É
+	//é¢å¤–ACåŠ æˆ
 	FOR (i=4;i<cols;i+=4) BEGIN
 		SET_2DA_ENTRY_LATER new_line 6 i ~AP_C4MKAC1~
 	END

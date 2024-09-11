@@ -1,6 +1,6 @@
 
 
-//// È­·¨
+//// æ‹³æ³•
 OUTER_FOR (f=1;f<5;++f) BEGIN
 	COPY ~%mod_root%/spl/base/c4mkf00.spl~ ~%workspace%/c4mkf%f%0.spl~
 		PATCH_FOR_EACH lvl IN a b c d e BEGIN
@@ -17,7 +17,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	OUTER_SET percentage = i=1 ? 5 : i=2 ? 8 : i=3 ? 13 : i=4 ? 21 : 34
 	OUTER_SET chance = 100 - percentage
 	
-	//±ù
+	//å†°
 	COPY_EXISTING ~c4mkf1%level%.spl~ override
 		PATCH_FOR_EACH effect IN 1 2 a BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf1%level%%effect%~ END
@@ -28,7 +28,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=14000 probability2=chance STR_VAR name=~c4mkf1%level%2~ END
 	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=2<<16 dicenumber=i dicesize=4 STR_VAR name=~c4mkf1%level%a~ END
 
-	//»ð
+	//ç«
 	COPY_EXISTING ~c4mkf2%level%.spl~ override
 		PATCH_FOR_EACH effect IN 1 BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf2%level%%effect%~ END
@@ -53,7 +53,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 			END
 		END
 		
-	//µç
+	//ç”µ
 	COPY_EXISTING ~c4mkf3%level%.spl~ override
 		PATCH_FOR_EACH effect IN 1 2 a BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf3%level%%effect%~ END
@@ -64,7 +64,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=0x500 probability2=chance STR_VAR name=~c4mkf3%level%2~ END
 	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=4<<16 dicenumber=i dicesize=4 STR_VAR name=~c4mkf3%level%a~ END
 	
-	//Ëá ÊÉÐÄ
+	//é…¸ å™¬å¿ƒ
 	COPY_EXISTING ~c4mkf4%level%.spl~ override
 		PATCH_FOR_EACH effect IN 1 a BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf4%level%%effect%~ END
@@ -74,7 +74,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	LAF CREATE_EFFECT INT_VAR opcode=0 timing=9 parameter1=~-1~ probability2=chance STR_VAR name=~c4mkf4%level%1~ END
 	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<16 dicenumber=i dicesize=4 STR_VAR name=~c4mkf4%level%a~ END
 	
-	//ÉËº¦³Í·£
+	//ä¼¤å®³æƒ©ç½š
 	COPY_EXISTING_REGEXP GLOB ~c4mkf[1-4]%level%.spl~ override
 		decrease=i*~-2~
 		GET_OFFSET_ARRAY header SPL_V10_HEADERS

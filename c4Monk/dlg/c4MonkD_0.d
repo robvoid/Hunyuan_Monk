@@ -103,8 +103,9 @@ IF ~~ THEN BEGIN refinefist
 	++ @1200 + fist2
 	++ @1300 + fist3
 	++ @1400 + fist4
-	// ++ @1500 + fist5
-	// ++ @1600 + fist6
+	++ @1500 + fist5
+	++ @1600 + fist6
+	++ @1700 + fist7
 	++ @104 + gotskillpoint
 END
 

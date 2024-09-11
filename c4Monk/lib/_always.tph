@@ -5,7 +5,7 @@ ACTION_IF !VARIABLE_IS_SET always_once_section BEGIN
 	OUTER_SPRINT LIBS			~%mod_root%/lib~
 	OUTER_SPRINT SCRIPTS	~%mod_root%/baf~
 	
-	OUTER_SET c4MonkVer=430
+	OUTER_SET c4MonkVer=440
 	OUTER_SET force_tra_rebuild=0
 	
 	INCLUDE ~%LIBS%/_A7functions.tpa~
@@ -28,6 +28,7 @@ ACTION_IF !VARIABLE_IS_SET always_once_section BEGIN
 		c4mkf4 =>	5
 		c4mkf5 =>	5
 		c4mkf6 =>	5
+		c5mkf7 =>	5
 		c4mkbd =>	5
 		c4mkmt1 =>	1
 		c4mkmt2 =>	1

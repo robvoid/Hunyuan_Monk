@@ -21,7 +21,7 @@ DEFINE_ACTION_FUNCTION addkit BEGIN
 	LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=1 STR_VAR name=c4mkchek variable=c4MonkCheck END
 	LAF CREATE_EFFECT INT_VAR opcode=187 timing=1 parameter1=c4MonkVer STR_VAR name=c4mkver variable=c4MonkVersion END
 
-	// ‘™…Ò≥ˆ«œ
+	// ÂÖÉÁ•ûÂá∫Á™ç
 	COPY_EXISTING c4mkimmu.spl override
 		WRITE_ASCII 0x3a c4mkimmu
 		LPF ALTER_SPELL_HEADER INT_VAR speed=0 STR_VAR icon=c4mkimmu END

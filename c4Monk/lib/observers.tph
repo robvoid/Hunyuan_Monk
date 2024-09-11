@@ -6,17 +6,17 @@ LAF create_observer STR_VAR name=c4MonkP conditions=~Kit(Player%slot%,c4Monk)~ E
 OUTER_FOR (PN=1;PN<7;++PN) BEGIN
 	COPY ~.../c4_inlined/blank.baf~ ~%workspace%/c4MonkP%PN%.baf~
 	
-	// ·ÀÖ¹¸½Ä§ÎäÆ÷ÐÎÊ½µÄÈ­Í·±»ctrl+rÇå³ý
+	// é˜²æ­¢é™„é­”æ­¦å™¨å½¢å¼çš„æ‹³å¤´è¢«ctrl+ræ¸…é™¤
 	COPY ~%workspace%/c4MonkP%PN%.baf~ ~%workspace%/c4MonkP%PN%.baf~
 		FOR (level=1;level<51;++level) BEGIN
 			APPEND_FILE_EVALUATE ~%SCRIPTS%/ensure_fist.baf~
 		END
 		
-	// ·ÀÖ¹Áè²¨Î¢²½Ìí¼ÓµÄÍ·¿ø±»ÒÆ³ý
+	// é˜²æ­¢å‡Œæ³¢å¾®æ­¥æ·»åŠ çš„å¤´ç›”è¢«ç§»é™¤
 	COPY ~%workspace%/c4MonkP%PN%.baf~ ~%workspace%/c4MonkP%PN%.baf~
 		APPEND_FILE_EVALUATE ~%SCRIPTS%/ensure_helm.baf~
 		
-	// ¼¼ÄÜµãºÍ´¥·¢¶Ô»°
+	// æŠ€èƒ½ç‚¹å’Œè§¦å‘å¯¹è¯
 	COPY ~%workspace%/c4MonkP%PN%.baf~ ~%workspace%/c4MonkP%PN%.baf~
 		APPEND_FILE_EVALUATE ~%SCRIPTS%/start_dialog.baf~
 		// APPEND_FILE_EVALUATE ~%SCRIPTS%/more_skill_point.baf~
@@ -24,6 +24,6 @@ OUTER_FOR (PN=1;PN<7;++PN) BEGIN
 			APPEND_FILE_EVALUATE ~%SCRIPTS%/add_skill_point.baf~
 		END
 		
-	//±àÒë
+	//ç¼–è¯‘
 	EXTEND_BOTTOM ~c4MonkP%PN%.bcs~ ~%workspace%/c4MonkP%PN%.baf~ EVAL
 END

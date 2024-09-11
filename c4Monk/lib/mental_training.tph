@@ -9,14 +9,14 @@ OUTER_FOR (x=1;x<5;++x) BEGIN
 		LPF CLONE_EFFECT INT_VAR multi_match=1 match_timing=9 opcode=321 parameter1=0 parameter2=0 timing=0 STR_VAR resource=~c4mkmt%x%a~ insert=first END
 END
 
-//EE»ìÂÒÃüÁîµÄ#328
+//EEæ··ä¹±å‘½ä»¤çš„#328
 COPY_EXISTING_REGEXP GLOB ~c4mkmt4.*\.spl~ override
 	PATCH_FOR_EACH parameter2 IN 41 67 68 BEGIN
 		LPF CLONE_EFFECT INT_VAR match_opcode=233 match_parameter2=119 opcode=328 parameter1=0 parameter2 special=1 END
 	END
 BUT_ONLY
 
-//Áè²¨Î¢²½¼ÓÍ·¿ø
+//å‡Œæ³¢å¾®æ­¥åŠ å¤´ç›”
 COPY ~%mod_root%/itm/c4mkhelm.itm~ override
 	SAY NAME1 @315
 	SAY DESC	@316
