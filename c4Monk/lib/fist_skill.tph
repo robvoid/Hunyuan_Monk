@@ -1,7 +1,7 @@
 
 
 //// 拳法
-OUTER_FOR (f=1;f<5;++f) BEGIN
+OUTER_FOR (f=1;f<9;++f) BEGIN
 	COPY ~%mod_root%/spl/base/c4mkf00.spl~ ~%workspace%/c4mkf%f%0.spl~
 		PATCH_FOR_EACH lvl IN a b c d e BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=321 timing=0 STR_VAR resource=~c4mkf%f%%lvl%~ END
@@ -18,7 +18,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	OUTER_SET chance = 100 - percentage
 
 	//ADDED 4.4
-	OUTER_SET hpercentage = i=1 ? 8 : i=2 ? 11 : i=3 ? 14 : i=4 ? 17 : 20
+	OUTER_SET hpercentage = i=1 ? 8 : i=2 ? 11 : i=3 ? 14 : i=4 ? 17 : 100
 	OUTER_SET hchance = 100 - hpercentage
 	OUTER_SET htype = i=5 ? 1 : 0
 	
@@ -83,8 +83,8 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	COPY_EXISTING ~c4mkf5%level%.spl~ override
 		PATCH_IF i=5 THEN
 		BEGIN
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=250 parameter1=25 parameter2=0 duration=1 probability2=90 STR_VAR resource=~c4mkf5%level%b~ END
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=1 parameter2=1<<24 dicenumber=1 dicesize=10 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=250 parameter1=25 parameter2=0 duration=1 probability2=85 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=1 parameter2=1<<24 dicenumber=1 dicesize=10 probability2=85 END
 		END
 		PATCH_FOR_EACH effect IN 1 2 a BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf5%level%%effect%~ END
@@ -94,11 +94,44 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 
 	LAF CREATE_EFFECT INT_VAR opcode=93 parameter1=9 parameter2=1 timing=0 duration=18 probability2=chance STR_VAR name=~c4mkf5%level%1~ END
 	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=11330 probability2=chance STR_VAR name=~c4mkf5%level%2~ END
-	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<24 dicenumber=i dicesize=3 STR_VAR name=~c4mkf4%level%a~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<24 dicenumber=i dicesize=3 STR_VAR name=~c4mkf5%level%a~ END
 
 	//点穴手
+	COPY_EXISTING ~c4mkf6%level%.spl~ override
+		PATCH_IF i=5 THEN
+		BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=1 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=2 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=3 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=4 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=5 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
+		END
+		PATCH_FOR_EACH effect IN 1 a BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf6%level%%effect%~ END
+		END
+		
+		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
 
+	LAF CREATE_EFFECT INT_VAR opcode=362 parameter1=1 parameter2=0 special=0 timing=0 duration=i*3+3 probability2=chance STR_VAR name=~c4mkf6%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<20 dicenumber=i dicesize=3 STR_VAR name=~c4mkf6%level%a~ END
+	
 	//螳螂拳
+	COPY_EXISTING ~c4mkf7%level%.spl~ override
+		PATCH_FOR_EACH effect IN 1 2 BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf7%level%%effect%~ END
+		END
+		
+		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
+
+	ACTION_IF i=5 THEN BEGIN
+		LAF CREATE_EFFECT INT_VAR opcode=317 parameter1=0 parameter2=1 timing=0 target=1 duration=90 probability2=hchance STR_VAR name=~c4mkf7%level%1~ END
+		LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=1565 probability2=chance STR_VAR name=~c4mkf7%level%2~ END
+	END
+	ELSE BEGIN
+		LAF CREATE_EFFECT INT_VAR opcode=317 parameter1=0 parameter2=0 timing=0 target=1 duration=90 probability2=hchance STR_VAR name=~c4mkf7%level%1~ END
+		LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=349 probability2=chance STR_VAR name=~c4mkf7%level%2~ END
+	END
+	//LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=0 dicenumber=0 dicesize=3 STR_VAR name=~c4mkf7%level%a~ END
 
 	//伤害惩罚
 	COPY_EXISTING_REGEXP GLOB ~c4mkf[1-7]%level%.spl~ override

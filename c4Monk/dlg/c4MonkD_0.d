@@ -162,16 +162,16 @@ IF ~~ THEN BEGIN fist5
 	+ ~Global("c4MonkSlashingFist","Locals",4)~ + @1551 DO ~SetGlobal("c4MonkSlashingFist","Locals",5) ReallyForceSpellRES("c4mkf5e",Myself)~ + done
 	+ ~Global("c4MonkSlashingFist","Locals",5)~ + @1502 + refinefist
 	++ @104 + gotskillpoint
-END	
+END
 
 IF ~~ THEN BEGIN fist6
 	SAY @1601
-	+ ~Global("c4MonkPiercingFist","Locals",0)~ + @1611 DO ~SetGlobal("c4MonkPiercingFist","Locals",1) ReallyForceSpellRES("c4mkf6a",Myself)~ + done
-	+ ~Global("c4MonkPiercingFist","Locals",1)~ + @1621 DO ~SetGlobal("c4MonkPiercingFist","Locals",2) ReallyForceSpellRES("c4mkf6b",Myself)~ + done
-	+ ~Global("c4MonkPiercingFist","Locals",2)~ + @1631 DO ~SetGlobal("c4MonkPiercingFist","Locals",3) ReallyForceSpellRES("c4mkf6c",Myself)~ + done
-	+ ~Global("c4MonkPiercingFist","Locals",3)~ + @1641 DO ~SetGlobal("c4MonkPiercingFist","Locals",4) ReallyForceSpellRES("c4mkf6d",Myself)~ + done
-	+ ~Global("c4MonkPiercingFist","Locals",4)~ + @1651 DO ~SetGlobal("c4MonkPiercingFist","Locals",5) ReallyForceSpellRES("c4mkf6e",Myself)~ + done
-	+ ~Global("c4MonkPiercingFist","Locals",5)~ + @1602 + refinefist
+	+ ~Global("c4MonkPiecingFist","Locals",0)~ + @1611 DO ~SetGlobal("c4MonkPiecingFist","Locals",1) ReallyForceSpellRES("c4mkf6a",Myself)~ + done
+	+ ~Global("c4MonkPiecingFist","Locals",1)~ + @1621 DO ~SetGlobal("c4MonkPiecingFist","Locals",2) ReallyForceSpellRES("c4mkf6b",Myself)~ + done
+	+ ~Global("c4MonkPiecingFist","Locals",2)~ + @1631 DO ~SetGlobal("c4MonkPiecingFist","Locals",3) ReallyForceSpellRES("c4mkf6c",Myself)~ + done
+	+ ~Global("c4MonkPiecingFist","Locals",3)~ + @1641 DO ~SetGlobal("c4MonkPiecingFist","Locals",4) ReallyForceSpellRES("c4mkf6d",Myself)~ + done
+	+ ~Global("c4MonkPiecingFist","Locals",4)~ + @1651 DO ~SetGlobal("c4MonkPiecingFist","Locals",5) ReallyForceSpellRES("c4mkf6e",Myself)~ + done
+	+ ~Global("c4MonkPiecingFist","Locals",5)~ + @1602 + refinefist
 	++ @104 + gotskillpoint
 END
 
@@ -184,5 +184,4 @@ IF ~~ THEN BEGIN fist7
 	+ ~Global("c4MonkHastingFist","Locals",4)~ + @1751 DO ~SetGlobal("c4MonkHastingFist","Locals",5) ReallyForceSpellRES("c4mkf7e",Myself)~ + done
 	+ ~Global("c4MonkHastingFist","Locals",5)~ + @1702 + refinefist
 	++ @104 + gotskillpoint
-END	
-
+END

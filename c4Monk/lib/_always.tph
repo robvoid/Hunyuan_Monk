@@ -28,7 +28,7 @@ ACTION_IF !VARIABLE_IS_SET always_once_section BEGIN
 		c4mkf4 =>	5
 		c4mkf5 =>	5
 		c4mkf6 =>	5
-		c5mkf7 =>	5
+		c4mkf7 =>	5
 		c4mkbd =>	5
 		c4mkmt1 =>	1
 		c4mkmt2 =>	1
