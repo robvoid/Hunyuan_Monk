@@ -17,7 +17,7 @@ COPY_EXISTING c4mksnif.spl override
 	SAY NAME1 @2003
 	SAY UNIDENTIFIED_DESC @2004
 	PATCH_FOR_EACH dmgtype IN 1 2 3 4 7 8 BEGIN
-		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=332 parameter1=5 parameter2=dmgtype STR_VAR resource=~~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=332 parameter1=8 arameter2=dmgtype STR_VAR resource=~~ END
 	END
 
 //回溯	
@@ -87,12 +87,12 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	END
 		
 	COPY_EXISTING ~c4mkc%i%d.spl~ override
-		//去掉提气 增大惊喜
+		//去掉提气
 		//LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=250 parameter1=25 parameter2=0 STR_VAR resource=~~ END
 		//伤害
 		LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=332 parameter1=50+i*10 parameter2=9 STR_VAR resource=~~ END
 		PATCH_FOR_EACH dmgtype IN 1 2 3 4 7 8 BEGIN
-			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=332 parameter1=i*5 parameter2=dmgtype STR_VAR resource=~~ END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=332 parameter1=i*10 parameter2=dmgtype STR_VAR resource=~~ END
 		END
 		//终结技
 		LPF ALTER_EFFECT STR_VAR match_resource=~c4mkc%i%e~ resource=~c4mkc%i%x~ END

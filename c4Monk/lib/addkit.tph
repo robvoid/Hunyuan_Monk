@@ -62,7 +62,7 @@ ADD_KIT c4Monk
 	// WEAPPROF.2DA
 	~c4Monk 0 1 0 0 1 0 0 1 0 1 1 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0~
 	// ABCLASRQ.2DA
-	~c4Monk 0 9 9 0 9 0~
+	~c4Monk 14 14 14 6 12 6~
 	// ABCLSMOD.2DA
 	~c4Monk 0 0 0 0 0 0~
 	// ABDCDSRQ.2DA

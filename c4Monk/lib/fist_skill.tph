@@ -16,6 +16,11 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	END
 	OUTER_SET percentage = i=1 ? 5 : i=2 ? 8 : i=3 ? 13 : i=4 ? 21 : 34
 	OUTER_SET chance = 100 - percentage
+
+	//ADDED 4.4
+	OUTER_SET hpercentage = i=1 ? 8 : i=2 ? 11 : i=3 ? 14 : i=4 ? 17 : 20
+	OUTER_SET hchance = 100 - hpercentage
+	OUTER_SET htype = i=5 ? 1 : 0
 	
 	//冰
 	COPY_EXISTING ~c4mkf1%level%.spl~ override
@@ -74,8 +79,29 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	LAF CREATE_EFFECT INT_VAR opcode=0 timing=9 parameter1=~-1~ probability2=chance STR_VAR name=~c4mkf4%level%1~ END
 	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<16 dicenumber=i dicesize=4 STR_VAR name=~c4mkf4%level%a~ END
 	
+	//金刚掌
+	COPY_EXISTING ~c4mkf5%level%.spl~ override
+		PATCH_IF i=5 THEN
+		BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=250 parameter1=25 parameter2=0 duration=1 probability2=90 STR_VAR resource=~c4mkf5%level%b~ END
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=1 parameter2=1<<24 dicenumber=1 dicesize=10 END
+		END
+		PATCH_FOR_EACH effect IN 1 2 a BEGIN
+			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf5%level%%effect%~ END
+		END
+		
+		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
+
+	LAF CREATE_EFFECT INT_VAR opcode=93 parameter1=9 parameter2=1 timing=0 duration=18 probability2=chance STR_VAR name=~c4mkf5%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=11330 probability2=chance STR_VAR name=~c4mkf5%level%2~ END
+	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<24 dicenumber=i dicesize=3 STR_VAR name=~c4mkf4%level%a~ END
+
+	//点穴手
+
+	//螳螂拳
+
 	//伤害惩罚
-	COPY_EXISTING_REGEXP GLOB ~c4mkf[1-4]%level%.spl~ override
+	COPY_EXISTING_REGEXP GLOB ~c4mkf[1-7]%level%.spl~ override
 		decrease=i*~-2~
 		GET_OFFSET_ARRAY header SPL_V10_HEADERS
 		PHP_EACH header AS int => index BEGIN
