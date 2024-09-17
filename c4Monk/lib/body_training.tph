@@ -1,8 +1,8 @@
 
-////…Ì∑®
+////Ë∫´Ê≥ï
 // LAF skill_creation STR_VAR spellname=c4mkbd END
 
-//–°Õº±Í
+//Â∞èÂõæÊ†á
 LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF (@211) STR_VAR bam_file=c4mkbd1d RET c4mkbd1d=icon END
 LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF (@221) STR_VAR bam_file=c4mkbd2d RET c4mkbd2d=icon END
 LAF cd_new_portrait_icon INT_VAR string= RESOLVE_STR_REF (@231) STR_VAR bam_file=c4mkbd3d RET c4mkbd3d=icon END
@@ -12,7 +12,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		WRITE_BYTE 0 THIS+48
 	END
 	
-	//∏˘∑® ı
+	//Ê†πÊ≥ïÊúØ
 	COPY ~%mod_root%/spl/base/c4mkbd0-.spl~ ~override/c4mkbd%level%-.spl~
 		WRITE_ASCII 0x3a C4MKBD
 		LPF ALTER_SPELL_HEADER STR_VAR icon=C4MKBD END
@@ -21,13 +21,13 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		SAY 12 @209
 		LPF ALTER_EFFECT STR_VAR resource=~c4mkbd%level%~ END	
 		
-	// π”√µƒ±Ì∏Ò
+	//‰ΩøÁî®ÁöÑË°®Ê†º
 	COPY ~%mod_root%/2da/c4mkbd0.2da~ ~override/c4mkbd%level%.2da~
 		SET_2DA_ENTRY 0 1 3 ~c4mkbd1%level%~
 		SET_2DA_ENTRY 1 1 3 ~c4mkbd2%level%~
 		SET_2DA_ENTRY 2 1 3 ~c4mkbd3%level%~
 		
-	//Ã˙≤º…¿
+	//ÈìÅÂ∏ÉË°´
 	COPY ~%mod_root%/spl/base/c4mkbd1.spl~ ~override/c4mkbd1%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD1
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD1 END
@@ -40,7 +40,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=142 opcode=321 parameter2=0 timing=0 duration=0 STR_VAR resource=~c4mkbd%bd%%level%~ END
 		END
 	
-	//’Ê‘™ª§ÃÂ
+	//ÁúüÂÖÉÊä§‰Ωì
 	COPY ~%mod_root%/spl/base/c4mkbd2.spl~ ~override/c4mkbd2%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD2
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD2 END
@@ -54,7 +54,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 		END
 		// LPF CLONE_EFFECT INT_VAR match_opcode=27 opcode=155 parameter1=0 END 
 	
-	//ÃÏÓ∏’Ω∆¯
+	//Â§©ÁΩ°ÊàòÊ∞î
 	COPY ~%mod_root%/spl/base/c4mkbd3.spl~ ~override/c4mkbd3%level%.spl~
 		WRITE_ASCII 0x3a C4MKBD3
 		LPF ALTER_SPELL_HEADER INT_VAR projectile=66 STR_VAR icon=C4MKBD3 END
@@ -89,7 +89,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 END
 
 
-////∏ﬂµ»…Ì∑®
+////È´òÁ≠âË∫´Ê≥ï
 LAF CREATE_EMPTY_SPELL STR_VAR name=c4mkbdx END
 COPY_EXISTING c4mkbdx.spl override
 	SAY NAME1 @2007
@@ -114,7 +114,7 @@ COPY ~%mod_root%/spl/base/c4mkbd0-.spl~ ~override/c4mkbdx-.spl~
 	
 OUTER_SET	bdx_duration=300
 
-//Ã˙≤º…¿
+//ÈìÅÂ∏ÉË°´
 COPY_EXISTING c4mkbd1e.spl ~override/c4mkbd1x.spl~
 	SAY NAME1 @212
 	FOR (bd=1;bd<4;++bd) BEGIN
@@ -133,7 +133,7 @@ LAF CREATE_EMPTY_SPELL STR_VAR name=c4mkbd1y END
 COPY_EXISTING c4mkbd1y.spl override
 	LPF ADD_SPELL_EFFECT INT_VAR opcode=218 target=2 timing=10 duration=100 parameter1=1 END
 	
-//’Ê‘™ª§ÃÂ
+//ÁúüÂÖÉÊä§‰Ωì
 COPY_EXISTING c4mkbd2e.spl ~override/c4mkbd2x.spl~
 	SAY NAME1 @222
 	FOR (bd=1;bd<4;++bd) BEGIN
@@ -142,7 +142,7 @@ COPY_EXISTING c4mkbd2e.spl ~override/c4mkbd2x.spl~
 	LPF ALTER_EFFECT INT_VAR match_parameter1=75 parameter1=100 END
 	LPF ALTER_EFFECT INT_VAR match_timing=0 duration=bdx_duration END
 	
-//ÃÏÓ∏’Ω∆¯
+//Â§©ÁΩ°ÊàòÊ∞î
 COPY_EXISTING c4mkbd3e.spl ~override/c4mkbd3x.spl~
 	SAY NAME1 @232
 	FOR (bd=1;bd<4;++bd) BEGIN
