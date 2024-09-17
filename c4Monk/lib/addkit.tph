@@ -89,6 +89,7 @@ ADD_KIT c4Monk
 
 //hla
 COPY ~%mod_root%/2da/luc4monk.2da~ override
+COPY ~%mod_root%/spl/C4MKBDX0.SPL~ override
 
 INCLUDE ~%LIBS%/fl#add_kit_ee.tpa~
 LAF fl#add_kit_ee STR_VAR
