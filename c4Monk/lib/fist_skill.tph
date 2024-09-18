@@ -98,22 +98,22 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 
 	//点穴手
 	COPY_EXISTING ~c4mkf6%level%.spl~ override
-		PATCH_IF i=5 THEN
-		BEGIN
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=1 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=2 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=3 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=4 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=4 duration=5 parameter1=2 parameter2=1<<20 dicenumber=0 dicesize=10 probability2=85 END
-		END
 		PATCH_FOR_EACH effect IN 1 a BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf6%level%%effect%~ END
 		END
-		
+
 		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
 
 	LAF CREATE_EFFECT INT_VAR opcode=362 parameter1=1 parameter2=0 special=0 timing=0 duration=i*3+3 probability2=chance STR_VAR name=~c4mkf6%level%1~ END
 	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<20 dicenumber=i dicesize=3 STR_VAR name=~c4mkf6%level%a~ END
+	ACTION_IF i=5 THEN
+	BEGIN
+		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=1 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
+		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=2 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
+		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=3 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
+		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=4 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
+		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=5 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
+	END
 	
 	//螳螂拳
 	COPY_EXISTING ~c4mkf7%level%.spl~ override

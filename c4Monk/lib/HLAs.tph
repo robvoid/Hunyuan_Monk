@@ -26,7 +26,7 @@ COPY_EXISTING c4mkrevi.spl override
 	LPF ALTER_SPELL_HEADER STR_VAR icon=c4mkrevb END
 	SAY NAME1 @2005
 	SAY UNIDENTIFIED_DESC @2006
-	LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=289 parameter1=2 parameter2=0 STR_VAR resource=~~ END
+	LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=289 parameter1=3 parameter2=0 STR_VAR resource=~~ END
 	
 //额外技能点
 COPY_EXISTING c4mkski2.spl override
