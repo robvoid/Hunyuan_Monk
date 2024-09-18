@@ -100,8 +100,8 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 
 		COPY ~%mod_root%/spl/base/c4mkfl5.spl~ ~override/c4mkf5%level%b.spl~
 			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=250 target=1 timing=0 duration=1 parameter1=25 parameter2=0 END
-			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=1 dicenumber=1 dicesize=10 parameter2=1<<20 dicenumber=0 END
-			LPF ALTER_EFFECT INT_VAR match_opcode=248 opcode=139 target=2 timing=1 parameter1=RESOLVE_STR_REF (@1671) END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=1 dicenumber=1 dicesize=10 parameter2=1<<24 dicenumber=0 END
+			LPF ALTER_EFFECT INT_VAR match_opcode=248 opcode=139 target=2 timing=1 parameter1=RESOLVE_STR_REF (@1571) END
 	END
 
 	//点穴手
