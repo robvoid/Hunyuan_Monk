@@ -17,7 +17,7 @@ COPY_EXISTING c4mksnif.spl override
 	SAY NAME1 @2003
 	SAY UNIDENTIFIED_DESC @2004
 	PATCH_FOR_EACH dmgtype IN 1 2 3 4 7 8 BEGIN
-		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=332 parameter1=8 arameter2=dmgtype STR_VAR resource=~~ END
+		LPF CLONE_EFFECT INT_VAR match_opcode=215 opcode=332 parameter1=8 parameter2=dmgtype STR_VAR resource=~~ END
 	END
 
 //回溯	

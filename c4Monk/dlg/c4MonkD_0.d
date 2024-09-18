@@ -20,6 +20,7 @@ IF ~Global("c4MonkDialog","Locals",0)
 		Global("c4MonkBodyTrainingHLA","Locals",1)~ THEN BEGIN c4mkbdx
 	SAY @210
 	IF ~~ THEN DO ~
+		SetInterrupt(TRUE)
 		SetGlobal("c4MonkBodyTrainingHLA","Locals",2)
 		ReallyForceSpellRES("c4mkbd00",Myself)
 		AddSpecialAbility("c4mkbdx-")

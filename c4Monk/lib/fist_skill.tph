@@ -81,38 +81,56 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	
 	//金刚掌
 	COPY_EXISTING ~c4mkf5%level%.spl~ override
-		PATCH_IF i=5 THEN
-		BEGIN
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=250 parameter1=25 parameter2=0 duration=1 probability2=85 END
-			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=12 timing=1 parameter2=1<<24 dicenumber=1 dicesize=10 probability2=85 END
-		END
 		PATCH_FOR_EACH effect IN 1 2 a BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf5%level%%effect%~ END
 		END
-		
+		PATCH_IF i=5 THEN BEGIN
+			PATCH_FOR_EACH effect IN b BEGIN
+				LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf5%level%%effect%~ END
+			END
+		END
 		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
 
 	LAF CREATE_EFFECT INT_VAR opcode=93 parameter1=9 parameter2=1 timing=0 duration=18 probability2=chance STR_VAR name=~c4mkf5%level%1~ END
-	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=11330 probability2=chance STR_VAR name=~c4mkf5%level%2~ END
+	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=RESOLVE_STR_REF (@1561) probability2=chance STR_VAR name=~c4mkf5%level%2~ END
 	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<24 dicenumber=i dicesize=3 STR_VAR name=~c4mkf5%level%a~ END
+	ACTION_IF i=5 THEN
+	BEGIN
+		LAF CREATE_EFFECT INT_VAR match_opcode=248 opcode=146 target=2 timing=0 parameter2=1 probability1=15 STR_VAR name=~c4mkf5%level%b~ resource=~c4mkf5%level%b.spl~ END
+
+		COPY ~%mod_root%/spl/base/c4mkfl5.spl~ ~override/c4mkf5%level%b.spl~
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=250 target=1 timing=0 duration=1 parameter1=25 parameter2=0 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=1 dicenumber=1 dicesize=10 parameter2=1<<20 dicenumber=0 END
+			LPF ALTER_EFFECT INT_VAR match_opcode=248 opcode=139 target=2 timing=1 parameter1=RESOLVE_STR_REF (@1671) END
+	END
 
 	//点穴手
 	COPY_EXISTING ~c4mkf6%level%.spl~ override
-		PATCH_FOR_EACH effect IN 1 a BEGIN
+		PATCH_FOR_EACH effect IN 1 2 a BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf6%level%%effect%~ END
+		END
+		PATCH_IF i=5 THEN BEGIN
+			PATCH_FOR_EACH effect IN b BEGIN
+				LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf6%level%%effect%~ END
+			END
 		END
 
 		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
 
 	LAF CREATE_EFFECT INT_VAR opcode=362 parameter1=1 parameter2=0 special=0 timing=0 duration=i*3+3 probability2=chance STR_VAR name=~c4mkf6%level%1~ END
+	LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=RESOLVE_STR_REF (@1661) probability2=chance STR_VAR name=~c4mkf6%level%2~ END
 	LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=1<<20 dicenumber=i dicesize=3 STR_VAR name=~c4mkf6%level%a~ END
 	ACTION_IF i=5 THEN
 	BEGIN
-		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=1 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
-		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=2 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
-		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=3 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
-		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=4 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
-		LAF CREATE_EFFECT INT_VAR opcode=12 timing=4 duration=5 parameter1=2 parameter2=1<<20 dicenumber=0 STR_VAR name=~c4mkf6%level%a~ END
+		LAF CREATE_EFFECT INT_VAR match_opcode=248 opcode=146 target=2 timing=0 parameter2=1 probability1=15 STR_VAR name=~c4mkf6%level%b~ resource=~c4mkf6%level%b.spl~ END
+
+		COPY ~%mod_root%/spl/base/c4mkfl5.spl~ ~override/c4mkf6%level%b.spl~	
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=4 duration=5 parameter1=2 parameter2=1<<20 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=4 duration=4 parameter1=2 parameter2=1<<20 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=4 duration=3 parameter1=2 parameter2=1<<20 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=4 duration=2 parameter1=2 parameter2=1<<20 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=4 duration=1 parameter1=2 parameter2=1<<20 END
+			LPF ALTER_EFFECT INT_VAR match_opcode=248 opcode=139 target=2 timing=1 parameter1=RESOLVE_STR_REF (@1671) END
 	END
 	
 	//螳螂拳
