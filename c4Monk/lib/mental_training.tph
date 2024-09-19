@@ -12,7 +12,7 @@ END
 //EE混乱命令的#328
 COPY_EXISTING_REGEXP GLOB ~c4mkmt4.*\.spl~ override
 	PATCH_FOR_EACH parameter2 IN 41 67 68 BEGIN
-		LPF CLONE_EFFECT INT_VAR match_opcode=233 match_parameter2=119 opcode=328 parameter1=0 parameter2 special=1 END
+		LPF CLONE_EFFECT INT_VAR match_opcode=233 match_parameter2=119 opcode=328 parameter1=0 parameter2 special=1 resist_dispel=0 END
 	END
 BUT_ONLY
 

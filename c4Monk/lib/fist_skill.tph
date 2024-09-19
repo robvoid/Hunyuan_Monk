@@ -18,9 +18,8 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	OUTER_SET chance = 100 - percentage
 
 	//ADDED 4.4
-	OUTER_SET hpercentage = i=1 ? 8 : i=2 ? 11 : i=3 ? 14 : i=4 ? 17 : 100
+	OUTER_SET hpercentage = i=1 ? 8 : i=2 ? 11 : i=3 ? 14 : i=4 ? 17 : 20
 	OUTER_SET hchance = 100 - hpercentage
-	OUTER_SET htype = i=5 ? 1 : 0
 	
 	//冰
 	COPY_EXISTING ~c4mkf1%level%.spl~ override
@@ -85,7 +84,7 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf5%level%%effect%~ END
 		END
 		PATCH_IF i=5 THEN BEGIN
-			PATCH_FOR_EACH effect IN b BEGIN
+			PATCH_FOR_EACH effect IN b x BEGIN
 				LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf5%level%%effect%~ END
 			END
 		END
@@ -97,11 +96,13 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	ACTION_IF i=5 THEN
 	BEGIN
 		LAF CREATE_EFFECT INT_VAR match_opcode=248 opcode=146 target=2 timing=0 parameter2=1 probability1=15 STR_VAR name=~c4mkf5%level%b~ resource=~c4mkf5%level%b.spl~ END
+		LAF CREATE_EFFECT INT_VAR match_opcode=248 opcode=321 target=1 timing=0 parameter2=2 STR_VAR name=~c4mkf5%level%x~ END
 
 		COPY ~%mod_root%/spl/base/c4mkfl5.spl~ ~override/c4mkf5%level%b.spl~
-			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=250 target=1 timing=0 duration=1 parameter1=25 parameter2=0 END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=250 target=1 timing=0 duration=6 parameter1=25 parameter2=0 END
 			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=12 target=2 timing=1 dicenumber=1 dicesize=10 parameter2=1<<24 END
-			LPF ALTER_EFFECT INT_VAR match_opcode=248 opcode=139 target=2 timing=1 parameter1=RESOLVE_STR_REF (@1571) END
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=139 target=1 timing=1 parameter1=RESOLVE_STR_REF (@1571) END
+			LPF ALTER_EFFECT INT_VAR match_opcode=248 target=1 timing=0 duration=6 probability1=100 probability2=0 STR_VAR resource=~c5mkf5ex~ END
 	END
 
 	//点穴手
@@ -135,25 +136,43 @@ OUTER_FOR (i=1;i<6;++i) BEGIN
 	
 	//螳螂拳
 	COPY_EXISTING ~c4mkf7%level%.spl~ override
-		PATCH_FOR_EACH effect IN 1 2 BEGIN
+		PATCH_FOR_EACH effect IN 1 BEGIN
 			LPF CLONE_EFFECT INT_VAR match_opcode=278 opcode=248 STR_VAR resource=~c4mkf7%level%%effect%~ END
 		END
-		
-		LPF ALTER_EFFECT INT_VAR match_opcode=278 parameter1=i END
 
-	ACTION_IF i=5 THEN BEGIN
-		LAF CREATE_EFFECT INT_VAR opcode=317 parameter1=0 parameter2=1 timing=0 target=1 duration=90 probability2=hchance STR_VAR name=~c4mkf7%level%1~ END
-		LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=1565 probability2=chance STR_VAR name=~c4mkf7%level%2~ END
-	END
-	ELSE BEGIN
-		LAF CREATE_EFFECT INT_VAR opcode=317 parameter1=0 parameter2=0 timing=0 target=1 duration=90 probability2=hchance STR_VAR name=~c4mkf7%level%1~ END
-		LAF CREATE_EFFECT INT_VAR opcode=139 timing=1 parameter1=349 probability2=chance STR_VAR name=~c4mkf7%level%2~ END
-	END
-	//LAF CREATE_EFFECT INT_VAR opcode=12 timing=1 parameter2=0 dicenumber=0 dicesize=3 STR_VAR name=~c4mkf7%level%a~ END
+	ACTION_IF i=1 THEN BEGIN
+		COPY ~%mod_root%/spl/base/c4mkfl5.spl~ ~override/c4mkf7c1.spl~
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=317 target=1 timing=0 duration=6 parameter1=0 parameter2=1 END
+			LPF ALTER_EFFECT INT_VAR match_opcode=248 opcode=139 target=1 timing=1 parameter1=RESOLVE_STR_REF (@1761) END
 
-	//伤害惩罚
-	COPY_EXISTING_REGEXP GLOB ~c4mkf[1-7]%level%.spl~ override
+		COPY ~%mod_root%/spl/base/c4mkfl5.spl~ ~override/c4mkf7a1.spl~
+			LPF CLONE_EFFECT INT_VAR match_opcode=248 opcode=317 target=1 timing=0 duration=6 parameter1=0 parameter2=0 END
+			LPF ALTER_EFFECT INT_VAR match_opcode=248 opcode=139 target=1 timing=1 parameter1=RESOLVE_STR_REF (@1761) END
+	END
+
+	ACTION_IF i>2 THEN BEGIN
+		LAF CREATE_EFFECT INT_VAR opcode=146 parameter1=0 parameter2=1 timing=0 target=1 probability2=hchance STR_VAR name=~c4mkf7%level%1~ resource=~c4mkf7c1~ END
+	END ELSE BEGIN
+		LAF CREATE_EFFECT INT_VAR opcode=146 parameter1=0 parameter2=1 timing=0 target=1 probability2=hchance STR_VAR name=~c4mkf7%level%1~ resource=~c4mkf7a1~ END
+	END
+
+	//其它拳法伤害惩罚
+	COPY_EXISTING_REGEXP GLOB ~c4mkf[1-6]%level%.spl~ override
 		decrease=i*~-2~
+		GET_OFFSET_ARRAY header SPL_V10_HEADERS
+		PHP_EACH header AS int => index BEGIN
+			GET_OFFSET_ARRAY2 effect index SPL_V10_HEAD_EFFECTS
+			PHP_EACH effect AS int => offset BEGIN
+				READ_SHORT offset opcode
+				PATCH_IF opcode=73 BEGIN
+					WRITE_LONG offset+4 decrease
+				END
+			END
+		END
+
+	//螳螂拳伤害惩罚
+	COPY_EXISTING_REGEXP GLOB ~c4mkf7%level%.spl~ override
+		decrease= i=5 ? ~-5~ : i*~-2~
 		GET_OFFSET_ARRAY header SPL_V10_HEADERS
 		PHP_EACH header AS int => index BEGIN
 			GET_OFFSET_ARRAY2 effect index SPL_V10_HEAD_EFFECTS

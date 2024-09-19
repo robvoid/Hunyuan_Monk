@@ -24,11 +24,19 @@ IF ~Global("c4MonkDialog","Locals",0)
 		SetGlobal("c4MonkBodyTrainingHLA","Locals",2)
 		ReallyForceSpellRES("c4mkbd00",Myself)
 		AddSpecialAbility("c4mkbdx-")
+		SetGlobal("c4MonkBodyTrainingHLACheck","Locals",1)
 		AddSpecialAbility("c4mkbdx-")
+		SetGlobal("c4MonkBodyTrainingHLACheck","Locals",2)
 		AddSpecialAbility("c4mkbdx-")
+		SetGlobal("c4MonkBodyTrainingHLACheck","Locals",3)
 		AddSpecialAbility("c4mkbdx-")
-		AddSpecialAbility("c4mkbdx-")~ EXIT
+		SetGlobal("c4MonkBodyTrainingHLACheck","Locals",4)
+		AddSpecialAbility("c4mkbdx-")
+		SetGlobal("c4MonkBodyTrainingHLACheck","Locals",5)
+		SetGlobal("c4MonkBodyTrainingHLA","Locals",3)~ EXIT
 END
+
+
 
 IF ~~ THEN BEGIN done
 	SAY @105
